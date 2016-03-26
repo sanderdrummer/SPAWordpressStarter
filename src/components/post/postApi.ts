@@ -1,15 +1,14 @@
 
-import ApiConfig = require('../../api/config');
+import Api = require('../../api/api');
 
-class PostApi {
-	url: string;
+class PostApi extends Api{
 
 	constructor() {
-		this.url = ApiConfig.APIURL + 'posts';
+		super('posts')
 	}
 
-	getPosts() {
-		return fetch(this.url);
+	getPosts(params:Object) {
+		return this.get(params, '');
 	}
 }
 

@@ -2,12 +2,18 @@ declare function require(string): string;
 // require('../style/main.less');
 
 import Router = require('./router/router');
-import PostView = require('./components/post/postView');
+import PostList = require('./components/post/postList');
+import HomeView = require('./components/homeView');
 
-console.log(PostView);
-var postView = new PostView();
+var postList = new PostList();
+var homeView = new HomeView();
 
 Router.register('/post', 'post', (params) => {
-	postView.render();
+	console.log('posts');
+	postList.getPosts(params);
+});
+Router.register('/', 'Home', (params) => {
+	homeView.getHome();
+	// postList.getPosts();
 });
 

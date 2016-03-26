@@ -21,6 +21,7 @@
     <div id="view"></div>
     <footer>
     </footer>
+    <script type="text/javascript" src="wp-content/themes/SPAStarter/src/polyfills/fetch.js" charset="utf-8"></script>
     <script type="text/javascript" src="wp-content/themes/SPAStarter/dist/bundle.js" charset="utf-8"></script>
   </body>
 </html>

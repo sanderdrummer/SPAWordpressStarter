@@ -1046,20 +1046,20 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 		// Base fields for every post.
 		$data = array(
 			'id'           => $post->ID,
-			'date'         => $this->prepare_date_response( $post->post_date_gmt, $post->post_date ),
-			'date_gmt'     => $this->prepare_date_response( $post->post_date_gmt ),
-			'guid'         => array(
+			// 'date'         => $this->prepare_date_response( $post->post_date_gmt, $post->post_date ),
+			// 'date_gmt'     => $this->prepare_date_response( $post->post_date_gmt ),
+			// 'guid'         => array(
 				/** This filter is documented in wp-includes/post-template.php */
-				'rendered' => apply_filters( 'get_the_guid', $post->guid ),
-				'raw'      => $post->guid,
-			),
-			'modified'     => $this->prepare_date_response( $post->post_modified_gmt, $post->post_modified ),
-			'modified_gmt' => $this->prepare_date_response( $post->post_modified_gmt ),
-			'password'     => $post->post_password,
-			'slug'         => $post->post_name,
-			'status'       => $post->post_status,
+				// 'rendered' => apply_filters( 'get_the_guid', $post->guid ),
+				// 'raw'      => $post->guid,
+			// ),
+			// 'modified'     => $this->prepare_date_response( $post->post_modified_gmt, $post->post_modified ),
+			// 'modified_gmt' => $this->prepare_date_response( $post->post_modified_gmt ),
+			// 'password'     => $post->post_password,
+			// 'slug'         => $post->post_name,
+			// 'status'       => $post->post_status,
 			'type'         => $post->post_type,
-			'link'         => get_permalink( $post->ID ),
+			// 'link'         => get_permalink( $post->ID ),
 		);
 
 		$schema = $this->get_item_schema();
@@ -1096,41 +1096,41 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 			);
 		}
 
-		if ( ! empty( $schema['properties']['author'] ) ) {
-			$data['author'] = (int) $post->post_author;
-		}
+		// if ( ! empty( $schema['properties']['author'] ) ) {
+		// 	$data['author'] = (int) $post->post_author;
+		// }
 
 		if ( ! empty( $schema['properties']['featured_media'] ) ) {
-			$data['featured_media'] = (int) get_post_thumbnail_id( $post->ID );
+			$data['featured_media'] = wp_get_attachment_url(get_post_thumbnail_id( $post->ID ));
 		}
 
-		if ( ! empty( $schema['properties']['parent'] ) ) {
-			$data['parent'] = (int) $post->post_parent;
-		}
+		// if ( ! empty( $schema['properties']['parent'] ) ) {
+		// 	$data['parent'] = (int) $post->post_parent;
+		// }
 
-		if ( ! empty( $schema['properties']['menu_order'] ) ) {
-			$data['menu_order'] = (int) $post->menu_order;
-		}
+		// if ( ! empty( $schema['properties']['menu_order'] ) ) {
+		// 	$data['menu_order'] = (int) $post->menu_order;
+		// }
 
-		if ( ! empty( $schema['properties']['comment_status'] ) ) {
-			$data['comment_status'] = $post->comment_status;
-		}
+		// if ( ! empty( $schema['properties']['comment_status'] ) ) {
+		// 	$data['comment_status'] = $post->comment_status;
+		// }
 
-		if ( ! empty( $schema['properties']['ping_status'] ) ) {
-			$data['ping_status'] = $post->ping_status;
-		}
+		// if ( ! empty( $schema['properties']['ping_status'] ) ) {
+		// 	$data['ping_status'] = $post->ping_status;
+		// }
 
-		if ( ! empty( $schema['properties']['sticky'] ) ) {
-			$data['sticky'] = is_sticky( $post->ID );
-		}
+		// if ( ! empty( $schema['properties']['sticky'] ) ) {
+		// 	$data['sticky'] = is_sticky( $post->ID );
+		// }
 
-		if ( ! empty( $schema['properties']['template'] ) ) {
-			if ( $template = get_page_template_slug( $post->ID ) ) {
-				$data['template'] = $template;
-			} else {
-				$data['template'] = '';
-			}
-		}
+		// if ( ! empty( $schema['properties']['template'] ) ) {
+		// 	if ( $template = get_page_template_slug( $post->ID ) ) {
+		// 		$data['template'] = $template;
+		// 	} else {
+		// 		$data['template'] = '';
+		// 	}
+		// }
 
 		if ( ! empty( $schema['properties']['format'] ) ) {
 			$data['format'] = get_post_format( $post->ID );
@@ -1154,7 +1154,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 		// Wrap the data in a response object.
 		$response = rest_ensure_response( $data );
 
-		$response->add_links( $this->prepare_links( $post ) );
+		// $response->add_links( $this->prepare_links( $post ) );
 
 		/**
 		 * Filter the post data for a response.

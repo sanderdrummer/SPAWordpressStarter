@@ -47,11 +47,17 @@
 	"use strict";
 	// require('../style/main.less');
 	var Router = __webpack_require__(12);
-	var PostView = __webpack_require__(14);
-	console.log(PostView);
-	var postView = new PostView();
+	var PostList = __webpack_require__(19);
+	var HomeView = __webpack_require__(22);
+	var postList = new PostList();
+	var homeView = new HomeView();
 	Router.register('/post', 'post', function (params) {
-	    postView.render();
+	    console.log('posts');
+	    postList.getPosts(params);
+	});
+	Router.register('/', 'Home', function (params) {
+	    homeView.getHome();
+	    // postList.getPosts();
 	});
 
 
@@ -71,6 +77,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
+	var _this = this;
 	var Route = __webpack_require__(13);
 	var routes = [];
 	var findParam = new RegExp(':[a-zA-Z]*');
@@ -147,6 +154,7 @@
 	module.exports = {
 	    register: function (url, title, callback) {
 	        routes.push(new Route(url, title, callback));
+	        return _this;
 	    }
 	};
 
@@ -168,83 +176,27 @@
 
 
 /***/ },
-/* 14 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var PostApi = __webpack_require__(15);
-	var Post = __webpack_require__(17);
-	var template = "\n<div class=\"grid center\">\n\t<div class=\"col-5\">" + this.title + "</div>\n</div>\n<div class=\"grid center\">\n\t<div class=\"col-5\">" + this.excerpt + "</div>\n\t<div class=\"col-5\">" + this.content + "</div>\n</div>\n";
-	var PostView = (function () {
-	    function PostView(config) {
-	        this.template = '';
-	        this.posts = [];
-	        this.api = new PostApi();
-	        this.view = document.getElementById('view');
-	    }
-	    PostView.prototype.render = function () {
-	        var _this = this;
-	        // get posts
-	        this.api.getPosts()
-	            .then(function (res) {
-	            return res.json();
-	        })
-	            .then(function (res) {
-	            console.log(res);
-	            _this.createPostList(res);
-	            _this.compile();
-	        });
-	    };
-	    PostView.prototype.createPostList = function (rawPosts) {
-	        var index = 0;
-	        var length = rawPosts.length;
-	        var rawPost;
-	        this.posts = [];
-	        while (index < length) {
-	            rawPost = rawPosts[index];
-	            if (rawPost) {
-	                this.posts.push(new Post({
-	                    title: rawPost.title.rendered,
-	                    content: rawPost.content.rendered,
-	                    excerpt: rawPost.excerpt.rendered
-	                }));
-	            }
-	            index += 1;
-	        }
-	    };
-	    PostView.prototype.compile = function () {
-	        var index = 0;
-	        var length = this.posts.length;
-	        while (index < length) {
-	            console.log(index);
-	            this.template += this.applyTemplate(this.posts[index]);
-	            index += 1;
-	        }
-	        this.view.innerHTML = this.template;
-	    };
-	    PostView.prototype.applyTemplate = function (post) {
-	        return "\n\t\t\t<div class=\"grid center\">\n\t\t\t\t<div class=\"col-5\">" + post.title + "</div>\n\t\t\t</div>\n\t\t\t<div class=\"grid center\">\n\t\t\t\t<div class=\"col-5\">" + post.excerpt + "</div>\n\t\t\t\t<div class=\"col-5\">" + post.content + "</div>\n\t\t\t</div>\n\t\t\t";
-	    };
-	    return PostView;
-	}());
-	module.exports = PostView;
-
-
-/***/ },
+/* 14 */,
 /* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var ApiConfig = __webpack_require__(16);
-	var PostApi = (function () {
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var Api = __webpack_require__(20);
+	var PostApi = (function (_super) {
+	    __extends(PostApi, _super);
 	    function PostApi() {
-	        this.url = ApiConfig.APIURL + 'posts';
+	        _super.call(this, 'posts');
 	    }
-	    PostApi.prototype.getPosts = function () {
-	        return fetch(this.url);
+	    PostApi.prototype.getPosts = function (params) {
+	        return this.get(params, '');
 	    };
 	    return PostApi;
-	}());
+	}(Api));
 	module.exports = PostApi;
 
 
@@ -255,7 +207,8 @@
 	"use strict";
 	module.exports = {
 	    BASEURL: 'http://localhost/wordpress/',
-	    APIURL: 'wp-json/wp/v2/'
+	    APIURL: 'wp-json/wp/v2/',
+	    VIEWELEM: 'view'
 	};
 
 
@@ -266,6 +219,7 @@
 	"use strict";
 	var Post = (function () {
 	    function Post(config) {
+	        this.id = config && config.id || '';
 	        this.title = config && config.title || '';
 	        this.content = config && config.content || '';
 	        this.excerpt = config && config.excerpt || '';
@@ -273,6 +227,176 @@
 	    return Post;
 	}());
 	module.exports = Post;
+
+
+/***/ },
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var Config = __webpack_require__(16);
+	var View = (function () {
+	    function View() {
+	        this.viewElem = document.getElementById(Config.VIEWELEM);
+	    }
+	    View.prototype.render = function (config) {
+	        config.template = config.template || '';
+	        config.append = config.append || false;
+	        if (config.append) {
+	            this.viewElem.innerHTML += config.template;
+	        }
+	        else {
+	            this.viewElem.innerHTML = config.template;
+	        }
+	    };
+	    return View;
+	}());
+	module.exports = View;
+
+
+/***/ },
+/* 19 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var PostApi = __webpack_require__(15);
+	var Post = __webpack_require__(17);
+	var View = __webpack_require__(18);
+	var template = __webpack_require__(21);
+	var PostList = (function (_super) {
+	    __extends(PostList, _super);
+	    function PostList() {
+	        _super.call(this);
+	        this.page = 1;
+	        this.append = false;
+	        this.template = '';
+	        this.posts = [];
+	        this.api = new PostApi();
+	    }
+	    PostList.prototype.getPosts = function (params) {
+	        var _this = this;
+	        params = params || {};
+	        params = {
+	            page: 2,
+	            test: 2
+	        };
+	        // fetch posts by api
+	        this.api.getPosts(params)
+	            .then(function (res) {
+	            return res.json();
+	        })
+	            .then(function (res) {
+	            _this.createPostList(res);
+	            _this.compose();
+	            _this.render({
+	                template: _this.template
+	            });
+	        });
+	    };
+	    PostList.prototype.createPostList = function (rawPosts) {
+	        var index = 0;
+	        var length = rawPosts.length;
+	        var rawPost;
+	        this.posts = [];
+	        while (index < length) {
+	            rawPost = rawPosts[index];
+	            if (rawPost) {
+	                this.posts[rawPost.id] = new Post({
+	                    id: rawPost.id,
+	                    title: rawPost.title.rendere,
+	                    content: rawPost.content.rendered,
+	                    excerpt: rawPost.excerpt.rendered
+	                });
+	            }
+	            index += 1;
+	        }
+	    };
+	    PostList.prototype.compose = function () {
+	        this.template = this.posts.map(function (post) {
+	            return template(post);
+	        }).join('');
+	    };
+	    return PostList;
+	}(View));
+	module.exports = PostList;
+
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var ApiConfig = __webpack_require__(16);
+	var Api = (function () {
+	    function Api(type) {
+	        this.baseUrl = ApiConfig.APIURL + type;
+	    }
+	    Api.prototype.get = function (params, url) {
+	        url = url || this.baseUrl;
+	        url = this.addParams(params);
+	        return fetch(url);
+	    };
+	    Api.prototype.addParams = function (params) {
+	        var url = this.baseUrl;
+	        var seperator = '?';
+	        var key;
+	        for (key in params) {
+	            if (key && params[key]) {
+	                url += seperator + key +
+	                    '=' + params[key];
+	                seperator = '&';
+	            }
+	        }
+	        return url;
+	    };
+	    return Api;
+	}());
+	module.exports = Api;
+
+
+/***/ },
+/* 21 */
+/***/ function(module, exports) {
+
+	"use strict";
+	module.exports = function applyTemplate(post) {
+	    var template = "\n\t<div class=\"grid center\">\n\t\t<div class=\"col-5\">" + post.title + "</div>\n\t</div>\n\t<div class=\"grid center\">\n\t\t<div class=\"col-5\">" + post.excerpt + "</div>\n\t\t<div class=\"col-5 hidden\">" + post.content + "</div>\n\t</div>\n\t";
+	    return template;
+	};
+
+
+/***/ },
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var View = __webpack_require__(18);
+	var template = "\n\t<div class=\"center container grid\">\n\t\t<h1>Home View</h1>\n\t\t<p> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores sed illo corporis deserunt iure tempore! Aut ut totam facere maiores eaque beatae autem error reiciendis vitae. Atque quas illum asperiores.</p>\n\t</div>\n";
+	var HomeView = (function (_super) {
+	    __extends(HomeView, _super);
+	    function HomeView() {
+	        _super.call(this);
+	        this.template = template;
+	    }
+	    HomeView.prototype.getHome = function () {
+	        this.render({
+	            template: this.template,
+	            append: false
+	        });
+	    };
+	    return HomeView;
+	}(View));
+	module.exports = HomeView;
 
 
 /***/ }

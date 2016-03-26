@@ -10,7 +10,7 @@ const findParam =  new RegExp(':[a-zA-Z]*');
  * @param  {Route}   route
  * @return {void}
  */
-function parseRouteUrl(hash:string, route){
+function parseRouteUrl(hash:string, route:Route){
     
     var result = getMatchAndParamsOf(hash, route.url);
 
@@ -97,5 +97,6 @@ document.addEventListener("DOMContentLoaded", handleHashChange);
 export = {
     register: (url:string, title:string, callback) => {
         routes.push(new Route(url, title, callback));
+        return this;
     }
 };
