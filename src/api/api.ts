@@ -9,13 +9,13 @@ class Api {
 
 	get(params: Object, url:String) {
 		url = url || this.baseUrl
-		url = this.addParams(params);
+		url = this.addParams(params, url);
+
 		return fetch(url);
 	}
 
-	addParams(params: Object): String {
+	addParams(params: Object, url:String): String {
 
-		var url = this.baseUrl;
 		var seperator = '?';
 		var key;
 

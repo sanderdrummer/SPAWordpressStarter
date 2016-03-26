@@ -95,8 +95,8 @@ document.addEventListener("DOMContentLoaded", handleHashChange);
 
 // exports public api to register new route
 export = {
-    register: (url:string, title:string, callback) => {
-        routes.push(new Route(url, title, callback));
+    register: (url:string, callback) => {
+        routes.push(new Route(url, callback));
         return this;
     }
 };

@@ -1,3 +1,4 @@
 export = {
-	postList: ''
+	postList: '',
+	pages: {}
 }

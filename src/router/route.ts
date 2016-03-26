@@ -4,9 +4,8 @@ class Route {
     callback: any;
 
 
-    constructor(url: string, title: string, callback) {
+    constructor(url: string, callback) {
         this.url = url;
-        this.title = title;
         this.callback = callback;
     }
 }

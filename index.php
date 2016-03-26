@@ -17,7 +17,7 @@
         <ul class="nav">
           <li><a href="#/">Home</a></li>
           <li><a href="#/posts">post</a></li>
-          <li><a href="#/Page">Page</a></li>
+          <li><a href="#/page/36">Page</a></li>
           <li><a href="#/Category">Category</a></li>
         </ul>
       </nav>

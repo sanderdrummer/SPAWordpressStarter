@@ -48,18 +48,23 @@
 	// require('../style/main.less');
 	var Router = __webpack_require__(12);
 	var PostList = __webpack_require__(19);
+	var PageView = __webpack_require__(25);
 	var HomeView = __webpack_require__(22);
 	var postList = new PostList();
+	var pageView = new PageView();
 	var homeView = new HomeView();
-	Router.register('/', 'Home', function (params) {
+	Router.register('/', function (params) {
 	    homeView.getHome();
 	    // postList.getPosts();
 	});
-	Router.register('/posts', 'post', function (params) {
+	Router.register('/posts', function (params) {
 	    postList.getPosts(params);
 	});
-	Router.register('/post/:id', 'post', function (params) {
+	Router.register('/post/:id', function (params) {
 	    postList.getSinglePost(params);
+	});
+	Router.register('/page/:id', function (params) {
+	    pageView.getPage(params);
 	});
 
 
@@ -154,8 +159,8 @@
 	// special case for startup
 	document.addEventListener("DOMContentLoaded", handleHashChange);
 	module.exports = {
-	    register: function (url, title, callback) {
-	        routes.push(new Route(url, title, callback));
+	    register: function (url, callback) {
+	        routes.push(new Route(url, callback));
 	        return _this;
 	    }
 	};
@@ -167,9 +172,8 @@
 
 	"use strict";
 	var Route = (function () {
-	    function Route(url, title, callback) {
+	    function Route(url, callback) {
 	        this.url = url;
-	        this.title = title;
 	        this.callback = callback;
 	    }
 	    return Route;
@@ -233,6 +237,7 @@
 	        this.title = config && config.title || '';
 	        this.content = config && config.content || '';
 	        this.excerpt = config && config.excerpt || '';
+	        this.image = config && config.image || '';
 	    }
 	    return Post;
 	}(View));
@@ -347,7 +352,8 @@
 	                    id: rawPost.id,
 	                    title: rawPost.title.rendered,
 	                    content: rawPost.content.rendered,
-	                    excerpt: rawPost.excerpt.rendered
+	                    excerpt: rawPost.excerpt.rendered,
+	                    image: rawPost.featured_media
 	                });
 	            }
 	            index += 1;
@@ -364,10 +370,10 @@
 	    };
 	    PostList.prototype.setCache = function (config) {
 	        // extend cache
-	        if (config.template != 'false') {
+	        if (config.template) {
 	            cache.postList += config.template;
 	        }
-	        else if (config.append && config.template != 'false') {
+	        else if (config.append && config.template) {
 	            cache.postList = config.template;
 	        }
 	    };
@@ -395,11 +401,10 @@
 	    }
 	    Api.prototype.get = function (params, url) {
 	        url = url || this.baseUrl;
-	        url = this.addParams(params);
+	        url = this.addParams(params, url);
 	        return fetch(url);
 	    };
-	    Api.prototype.addParams = function (params) {
-	        var url = this.baseUrl;
+	    Api.prototype.addParams = function (params, url) {
 	        var seperator = '?';
 	        var key;
 	        for (key in params) {
@@ -463,8 +468,131 @@
 
 	"use strict";
 	module.exports = {
-	    postList: ''
+	    postList: '',
+	    pages: {}
 	};
+
+
+/***/ },
+/* 25 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var PageApi = __webpack_require__(26);
+	var Page = __webpack_require__(27);
+	var View = __webpack_require__(18);
+	var cache = __webpack_require__(24);
+	var PostList = (function (_super) {
+	    __extends(PostList, _super);
+	    function PostList() {
+	        _super.call(this);
+	        this.template = '';
+	        this.api = new PageApi();
+	    }
+	    PostList.prototype.getPage = function (params) {
+	        var _this = this;
+	        // check if page is in cache
+	        if (params.id && cache.pages[params.id]) {
+	            this.render({
+	                template: cache.pages[params.id]
+	            });
+	        }
+	        else {
+	            // fetch posts by api
+	            this.api.getPage(params)
+	                .then(function (res) {
+	                return res.json();
+	            })
+	                .then(function (res) {
+	                _this.createPage(res);
+	                _this.template = _this.applyTemplate(_this.page);
+	                _this.render({
+	                    template: _this.template
+	                });
+	                _this.setCache();
+	            });
+	        }
+	    };
+	    PostList.prototype.createPage = function (rawPage) {
+	        this.page = new Page({
+	            id: rawPage.id,
+	            title: rawPage.title.rendered,
+	            content: rawPage.content.rendered,
+	            image: rawPage.featured_media
+	        });
+	    };
+	    PostList.prototype.setCache = function () {
+	        // extend cache
+	        if (this.template && this.page.id) {
+	            cache.pages[this.page.id] = this.template;
+	        }
+	    };
+	    PostList.prototype.applyTemplate = function (page) {
+	        var template = "\n\t\t<div id=\"page_" + page.id + "\">\n\t\t\t<img src=\"" + page.image + "\" alt=\"\" />\n\t\t\t<div class=\"grid center\">\n\t\t\t\t<div class=\"col-5\">" + page.title + "</div>\n\t\t\t</div>\n\t\t\t<div class=\"grid center\">\n\t\t\t\t<div class=\"col-12\">" + page.content + "</div>\n\t\t\t</div>\n\t\t</div>\n\t\t";
+	        return template;
+	    };
+	    return PostList;
+	}(View));
+	module.exports = PostList;
+
+
+/***/ },
+/* 26 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var Api = __webpack_require__(20);
+	var PageApi = (function (_super) {
+	    __extends(PageApi, _super);
+	    function PageApi() {
+	        _super.call(this, 'pages');
+	    }
+	    PageApi.prototype.getPage = function (params) {
+	        var restUrl;
+	        if (params.id) {
+	            restUrl = this.baseUrl + '/' + params.id.toString();
+	            delete params.id;
+	        }
+	        return this.get(params, restUrl);
+	    };
+	    return PageApi;
+	}(Api));
+	module.exports = PageApi;
+
+
+/***/ },
+/* 27 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var View = __webpack_require__(18);
+	var Page = (function (_super) {
+	    __extends(Page, _super);
+	    function Page(config) {
+	        _super.call(this);
+	        this.id = config && config.id || '';
+	        this.title = config && config.title || '';
+	        this.content = config && config.content || '';
+	        this.image = config && config.image || '';
+	    }
+	    return Page;
+	}(View));
+	module.exports = Page;
 
 
 /***/ }

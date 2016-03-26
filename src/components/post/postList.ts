@@ -82,7 +82,8 @@ class PostList extends View{
 					id: rawPost.id,
 					title: rawPost.title.rendered,
 					content: rawPost.content.rendered,
-					excerpt: rawPost.excerpt.rendered
+					excerpt: rawPost.excerpt.rendered,
+					image: rawPost.featured_media
 				});
 			}
 
@@ -104,11 +105,11 @@ class PostList extends View{
 	setCache(config) {
 
 		// extend cache
-		if (config.template != 'false') {
+		if (config.template) {
 			cache.postList += config.template;
 		
 		// init cache
-		} else if (config.append && config.template != 'false') {
+		} else if (config.append && config.template) {
 			cache.postList = config.template;
 		}
 	}

@@ -1,11 +1,10 @@
 import View = require('../view');
 
-class Post extends View{
+class Page extends View{
 
 	id: number;
 	title: string;
 	content: string;
-	excerpt: string;
 	image: string;
 	elem: Element;
 	template: string;
@@ -15,10 +14,11 @@ class Post extends View{
 		this.id = config && config.id || '';
 		this.title = config && config.title || '';
 		this.content = config && config.content || '';
-		this.excerpt = config && config.excerpt || '';
 		this.image = config && config.image || '';
+
 	}
+
 
 }
 
-export = Post;
+export = Page;
