@@ -51,13 +51,15 @@
 	var HomeView = __webpack_require__(22);
 	var postList = new PostList();
 	var homeView = new HomeView();
-	Router.register('/post', 'post', function (params) {
-	    console.log('posts');
-	    postList.getPosts(params);
-	});
 	Router.register('/', 'Home', function (params) {
 	    homeView.getHome();
 	    // postList.getPosts();
+	});
+	Router.register('/posts', 'post', function (params) {
+	    postList.getPosts(params);
+	});
+	Router.register('/post/:id', 'post', function (params) {
+	    postList.getSinglePost(params);
 	});
 
 
@@ -214,18 +216,26 @@
 
 /***/ },
 /* 17 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var Post = (function () {
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var View = __webpack_require__(18);
+	var Post = (function (_super) {
+	    __extends(Post, _super);
 	    function Post(config) {
+	        _super.call(this);
 	        this.id = config && config.id || '';
 	        this.title = config && config.title || '';
 	        this.content = config && config.content || '';
 	        this.excerpt = config && config.excerpt || '';
 	    }
 	    return Post;
-	}());
+	}(View));
 	module.exports = Post;
 
 
@@ -249,6 +259,9 @@
 	            this.viewElem.innerHTML = config.template;
 	        }
 	    };
+	    View.prototype.getHeight = function () {
+	        return this.viewElem.getBoundingClientRect().height;
+	    };
 	    return View;
 	}());
 	module.exports = View;
@@ -268,35 +281,60 @@
 	var Post = __webpack_require__(17);
 	var View = __webpack_require__(18);
 	var template = __webpack_require__(21);
+	var cache = __webpack_require__(24);
 	var PostList = (function (_super) {
 	    __extends(PostList, _super);
 	    function PostList() {
+	        var _this = this;
 	        _super.call(this);
 	        this.page = 1;
 	        this.append = false;
 	        this.template = '';
 	        this.posts = [];
 	        this.api = new PostApi();
+	        this.notDone = true;
+	        document.addEventListener('scroll', function () {
+	            if (_this.notDone &&
+	                _this.viewHeight / 2 < window.pageYOffset) {
+	                _this.appendOnScroll();
+	            }
+	        });
 	    }
 	    PostList.prototype.getPosts = function (params) {
 	        var _this = this;
-	        params = params || {};
-	        params = {
-	            page: 2,
-	            test: 2
-	        };
-	        // fetch posts by api
-	        this.api.getPosts(params)
-	            .then(function (res) {
-	            return res.json();
-	        })
-	            .then(function (res) {
-	            _this.createPostList(res);
-	            _this.compose();
-	            _this.render({
-	                template: _this.template
+	        // check if posts are already in cache
+	        if (cache.postList && !this.notDone) {
+	            this.render({
+	                template: cache.postList
 	            });
-	        });
+	        }
+	        else {
+	            // extend params
+	            params = params || {};
+	            params.page = params.page || 1;
+	            // fetch posts by api
+	            this.api.getPosts(params)
+	                .then(function (res) {
+	                return res.json();
+	            })
+	                .then(function (res) {
+	                var config;
+	                if (res.length) {
+	                    _this.createPostList(res);
+	                    _this.compose();
+	                    config = {
+	                        template: _this.template,
+	                        append: params.page > 1
+	                    };
+	                    _this.render(config);
+	                    _this.setCache(config);
+	                    _this.viewHeight = _this.getHeight();
+	                }
+	                else {
+	                    _this.notDone = false;
+	                }
+	            });
+	        }
 	    };
 	    PostList.prototype.createPostList = function (rawPosts) {
 	        var index = 0;
@@ -308,7 +346,7 @@
 	            if (rawPost) {
 	                this.posts[rawPost.id] = new Post({
 	                    id: rawPost.id,
-	                    title: rawPost.title.rendere,
+	                    title: rawPost.title.rendered,
 	                    content: rawPost.content.rendered,
 	                    excerpt: rawPost.excerpt.rendered
 	                });
@@ -320,6 +358,26 @@
 	        this.template = this.posts.map(function (post) {
 	            return template(post);
 	        }).join('');
+	    };
+	    PostList.prototype.appendOnScroll = function () {
+	        this.page += 1;
+	        this.getPosts({ page: this.page });
+	    };
+	    PostList.prototype.setCache = function (config) {
+	        // extend cache
+	        if (config.template != 'false') {
+	            cache.postList += config.template;
+	        }
+	        else if (config.append && config.template != 'false') {
+	            cache.postList = config.template;
+	        }
+	    };
+	    PostList.prototype.getSinglePost = function (params) {
+	        console.log(params, this.posts);
+	        var post = this.posts[params.id];
+	        post.render({
+	            template: template(post)
+	        });
 	    };
 	    return PostList;
 	}(View));
@@ -365,7 +423,7 @@
 
 	"use strict";
 	module.exports = function applyTemplate(post) {
-	    var template = "\n\t<div class=\"grid center\">\n\t\t<div class=\"col-5\">" + post.title + "</div>\n\t</div>\n\t<div class=\"grid center\">\n\t\t<div class=\"col-5\">" + post.excerpt + "</div>\n\t\t<div class=\"col-5 hidden\">" + post.content + "</div>\n\t</div>\n\t";
+	    var template = "\n\t<div id=\"post_" + post.id + "\">\n\t\t<div class=\"grid center\">\n\t\t\t<div class=\"col-5\"><a href=\"#/post/" + post.id + "\">" + post.title + "</a> </div>\n\t\t</div>\n\t\t<div class=\"grid center\">\n\t\t\t<div class=\"col-5\">" + post.excerpt + "</div>\n\t\t\t<div class=\"col-5 hidden\">" + post.content + "</div>\n\t\t</div>\n\t</div>\n\t";
 	    return template;
 	};
 
@@ -397,6 +455,17 @@
 	    return HomeView;
 	}(View));
 	module.exports = HomeView;
+
+
+/***/ },
+/* 23 */,
+/* 24 */
+/***/ function(module, exports) {
+
+	"use strict";
+	module.exports = {
+	    postList: ''
+	};
 
 
 /***/ }

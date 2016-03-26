@@ -1,6 +1,7 @@
 var lastPosition = window.pageYOffset;
 var stop = false;
-var onScroll = function(){};
+var onScroll = [];
+
 // animationFrame
 var scroll = window.requestAnimationFrame || function(callback){ window.setTimeout(callback, 1000 / 60); };
 
@@ -10,23 +11,20 @@ function loop(){
         scroll(loop);
 
     } else {
-                
-        if( window.pageYOffset > 1000) {
-            onScroll();
-        }
+               
         // toggleNavOnScroll(w.pageYOffset);
-        // revealElementsInViewport(opaqueElems);
 
         lastPosition = window.pageYOffset;
-
+        
         scroll(loop);
     }
 
 }
 
 export = {
-    start: function(callback){
-        onScroll = callback;
-        loop();
-    }
+    addOnScroll: function(callback){
+        onScroll.push(callback);
+    },
+    start: () => loop()
+
 }

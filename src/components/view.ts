@@ -2,12 +2,13 @@ import Config = require('../api/config');
 
 class View {
 	viewElem: Element;
+	scroll:any;
 
-	constructor(){
+	constructor() {
 		this.viewElem = document.getElementById(Config.VIEWELEM);
 	}
 
-	render(config:any){
+	render(config:any) {
 		
 		config.template = config.template || '';
 		config.append = config.append || false;
@@ -18,6 +19,11 @@ class View {
 		} else {
 			this.viewElem.innerHTML = config.template;
 		}
+	}
+
+	getHeight() {
+
+		return this.viewElem.getBoundingClientRect().height;
 	}
 }
 
