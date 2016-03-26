@@ -340,7 +340,6 @@
 	        var index = 0;
 	        var length = rawPosts.length;
 	        var rawPost;
-	        this.posts = [];
 	        while (index < length) {
 	            rawPost = rawPosts[index];
 	            if (rawPost) {
