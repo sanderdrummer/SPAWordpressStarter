@@ -8,17 +8,9 @@ class View {
 		this.viewElem = document.getElementById(Config.VIEWELEM);
 	}
 
-	render(config:any) {
+	render(template:string) {
 		
-		config.template = config.template || '';
-		config.append = config.append || false;
-
-		if (config.append) {
-			this.viewElem.innerHTML += config.template;
-
-		} else {
-			this.viewElem.innerHTML = config.template;
-		}
+		this.viewElem.innerHTML = template;
 	}
 
 	getHeight() {

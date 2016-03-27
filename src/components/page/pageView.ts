@@ -19,9 +19,7 @@ class PostList extends View{
 		
 		// check if page is in cache
 		if (params.id && cache.pages[params.id]) {
-			this.render({
-				template: cache.pages[params.id]
-			});
+			this.render(cache.pages[params.id]);
 
 		} else {
 
@@ -33,9 +31,7 @@ class PostList extends View{
 				.then((res) => {
 					this.createPage(res);
 					this.template = this.applyTemplate(this.page)
-					this.render({
-						template: this.template
-					});
+					this.render(this.template);
 					this.setCache();
 				});
 		}

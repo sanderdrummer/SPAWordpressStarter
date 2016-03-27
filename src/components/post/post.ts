@@ -12,7 +12,7 @@ class Post extends View{
 
 	constructor(config: any){
 		super();
-		this.id = config && config.id || '';
+		this.id = config && config.id || 0;
 		this.title = config && config.title || '';
 		this.content = config && config.content || '';
 		this.excerpt = config && config.excerpt || '';

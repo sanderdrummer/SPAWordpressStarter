@@ -4,7 +4,8 @@
   <head>
     <meta charset="utf-8">
     <title>Test</title>
-    <link rel="stylesheet" href="wp-content/themes/SPAStarter/dist/main.css" media="screen" charset="utf-8">
+    <link rel="stylesheet" 
+      href="<?php bloginfo('template_url'); ?>/dist/main.css" media="screen" charset="utf-8">
     <style>
       .hidden{
         display: none;
@@ -25,7 +26,9 @@
     <div id="view"></div>
     <footer>
     </footer>
-    <script type="text/javascript" src="wp-content/themes/SPAStarter/src/polyfills/fetch.js" charset="utf-8"></script>
-    <script type="text/javascript" src="wp-content/themes/SPAStarter/dist/bundle.js" charset="utf-8"></script>
+    <script type="text/javascript" 
+      src="<?php bloginfo('template_url'); ?>/src/polyfills/fetch.js" charset="utf-8"></script>
+    <script type="text/javascript" 
+      src="<?php bloginfo('template_url'); ?>/dist/bundle.js"></script>
   </body>
 </html>

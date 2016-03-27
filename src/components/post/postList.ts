@@ -3,6 +3,7 @@ import Post = require('./post');
 import View = require('../view');
 import template = require('./postListTemplate');
 import cache = require('../common/cache');
+import scrollPosition = require('../../services/scroll/scrollPosition');
 
 class PostList extends View{
 
@@ -10,18 +11,20 @@ class PostList extends View{
 	template: string;
 	posts: Post[];
 	page: number;
-	append: boolean;
 	viewHeight: number;
+	currentScrollPosition: number;
+	leftPage: boolean;
 	notDone: boolean;
 
 	constructor() {
 		super();
 		this.page = 1;
-		this.append = false;
 		this.template = '';
 		this.posts = [];
 		this.api = new PostApi();
 		this.notDone = true;
+		this.leftPage = false;
+		this.currentScrollPosition = scrollPosition.get();
 
 		document.addEventListener('scroll', () => {
 			if (this.notDone && 
@@ -32,41 +35,46 @@ class PostList extends View{
 	}
 
 	getPosts(params:Object) {
-		
+
 		// check if posts are already in cache
 		if (cache.postList && !this.notDone) {
-			this.render({
-				template: cache.postList
-			});
+			this.render(cache.postList);
 
 		} else {
-
-			// extend params
-			params = params || {};
-			params.page = params.page || 1;
-
-			// fetch posts by api
-			this.api.getPosts(params)
-				.then((res) => {
-					return res.json();
-				})
-				.then((res) => {
-					var config; 
-					if (res.length) {
-						this.createPostList(res);
-						this.compose();
-						config = {
-							template: this.template,
-							append: params.page > 1
-						}
-						this.render(config);
-						this.setCache(config);
-						this.viewHeight = this.getHeight();
-					} else {
-						this.notDone = false
-					}
-				});
+			this.fetchPostsByApi(params);
 		}
+
+		if (this.leftPage) {
+			scrollPosition.set(this.currentScrollPosition);
+			this.leftPage = false;
+		}
+
+	}
+
+	fetchPostsByApi(params: Object) {
+
+		// extend params
+		params = params || {};
+		params.page = params.page || 1;
+
+		// fetch posts by api
+		this.api.getPosts(params)
+			.then((res) => {
+				return res.json();
+			})
+			.then((res) => {
+
+				if (res.length) {
+					this.createPostList(res);
+					this.compose();
+					this.render(this.template);
+					this.setCache(this.template);
+					this.viewHeight = this.getHeight();
+
+				} else {
+					this.notDone = false
+				}
+			});
 	}
 
 	createPostList(rawPosts:Object[]) {
@@ -76,22 +84,29 @@ class PostList extends View{
 
 		while (index < length) {
 			rawPost = rawPosts[index];
-			
-			if (rawPost) {
-				this.posts[rawPost.id] = new Post({
+			if (rawPost && 
+				!this.getPostById(this.posts, rawPost.id)) {
+				this.posts.push(new Post({
 					id: rawPost.id,
 					title: rawPost.title.rendered,
 					content: rawPost.content.rendered,
 					excerpt: rawPost.excerpt.rendered,
 					image: rawPost.featured_media
-				});
+				}));
 			}
 
 			index += 1;
 		}
 	}
 
+	sortList() {
+		this.posts.sort((a,b) => {
+			return b.id - a.id;
+		});
+	}
+
 	compose() {
+		this.sortList();
 		this.template = this.posts.map(post => {
 			return template(post);
 		}).join('');
@@ -103,23 +118,29 @@ class PostList extends View{
 	}
 
 	setCache(config) {
-
 		// extend cache
-		if (config.template) {
-			cache.postList += config.template;
-		
-		// init cache
-		} else if (config.append && config.template) {
+		if (template && !this.notDone) {
 			cache.postList = config.template;
-		}
+		}		
 	}
 
 	getSinglePost(params) {
-		console.log(params, this.posts);
-		var post = this.posts[params.id];
-		post.render({
-			template: template(post)
+		this.currentScrollPosition = scrollPosition.get();
+		this.leftPage = true;
+		var post = this.getPostById(this.posts, params.id);
+		post.render(template(post));
+	}
+
+	getPostById(list, id) {
+		var post:Post;
+
+		list.forEach((maybePost: Post) => {
+			if (maybePost.id == id) {
+				post = maybePost;
+			}
 		});
+
+		return post;
 	}
 }
 

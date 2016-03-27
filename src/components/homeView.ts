@@ -17,10 +17,7 @@ class HomeView extends View {
 	}
 
 	getHome(){
-		this.render({
-			template: this.template,
-			append: false
-		})
+		this.render(this.template)
 	}
 
 }
