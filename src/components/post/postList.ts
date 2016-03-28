@@ -10,7 +10,9 @@ class PostList extends View{
 	api: PostApi;
 	template: string;
 	posts: Post[];
+	filteredPosts: Post[],
 	page: number;
+	params:{}
 	viewHeight: number;
 	currentScrollPosition: number;
 	leftPage: boolean;
@@ -23,18 +25,24 @@ class PostList extends View{
 		this.posts = [];
 		this.api = new PostApi();
 		this.notDone = true;
-		this.leftPage = false;
+		this.leftPage = true;
+		this.params = {};
 		this.currentScrollPosition = scrollPosition.get();
 
 		document.addEventListener('scroll', () => {
 			if (this.notDone && 
 				this.viewHeight / 2 < window.pageYOffset) {
-				this.appendOnScroll();
+				this.appendOnScroll(this.params);
 			}
 		});
 	}
 
 	getPosts(params:Object) {
+		this.params = params;
+
+		if (this.leftPage) {
+			this.viewElem.classList.add('loader');
+		}
 
 		// check if posts are already in cache
 		if (cache.postList && !this.notDone) {
@@ -48,6 +56,7 @@ class PostList extends View{
 			scrollPosition.set(this.currentScrollPosition);
 			this.leftPage = false;
 		}
+		console.log(this.posts,);
 
 	}
 
@@ -112,15 +121,20 @@ class PostList extends View{
 		}).join('');
 	}
 
-	appendOnScroll() {
+	appendOnScroll(params) {
 		this.page += 1;
-		this.getPosts({page:this.page});
+		params.page = this.page;
+		this.getPosts(params);
 	}
 
-	setCache(config) {
+	filterPosts(filterVar) {
+		console.log(filterVar);
+	}
+
+	setCache(template) {
 		// extend cache
 		if (template && !this.notDone) {
-			cache.postList = config.template;
+			cache.postList = template;
 		}		
 	}
 

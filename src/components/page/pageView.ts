@@ -1,13 +1,14 @@
 import PageApi = require('./pageApi');
 import Page = require('./page');
 import View = require('../view');
-import cache = require('../common/cache');
 
 class PostList extends View{
 
 	api: PageApi;
 	template: string;
 	page: Page;
+	cache: string;
+	active: boolean;
 
 	constructor() {
 		super();
@@ -16,13 +17,14 @@ class PostList extends View{
 	}
 
 	getPage(params:Object) {
+
+		this.viewElem.classList.add('loader');
 		
 		// check if page is in cache
-		if (params.id && cache.pages[params.id]) {
-			this.render(cache.pages[params.id]);
+		if (this.cache) {
+			this.render(this.cache);
 
 		} else {
-
 			// fetch posts by api
 			this.api.getPage(params)
 				.then((res) => {
@@ -50,7 +52,7 @@ class PostList extends View{
 	setCache() {
 		// extend cache
 		if (this.template && this.page.id) {
-			cache.pages[this.page.id] = this.template;
+			this.cache = this.template;
 		}
 	}
 

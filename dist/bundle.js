@@ -50,15 +50,20 @@
 	var PostList = __webpack_require__(19);
 	var PageView = __webpack_require__(25);
 	var HomeView = __webpack_require__(22);
+	var CategoryApi = __webpack_require__(30);
 	var postList = new PostList();
 	var pageView = new PageView();
 	var homeView = new HomeView();
+	var categorieApi = new CategoryApi();
+	categorieApi.getCategories();
 	Router.register('/', function (params) {
 	    homeView.getHome();
-	    // postList.getPosts();
 	});
 	Router.register('/posts', function (params) {
 	    postList.getPosts(params);
+	});
+	Router.register('/posts/:category', function (params) {
+	    postList.filterPosts(params);
 	});
 	Router.register('/post/:id', function (params) {
 	    postList.getSinglePost(params);
@@ -213,7 +218,7 @@
 	"use strict";
 	module.exports = {
 	    BASEURL: 'http://localhost/wordpress/',
-	    APIURL: 'wp-json/wp/v2/',
+	    APIURL: '/wordpress/wp-json/wp/v2/',
 	    VIEWELEM: 'view'
 	};
 
@@ -256,6 +261,7 @@
 	    }
 	    View.prototype.render = function (template) {
 	        this.viewElem.innerHTML = template;
+	        this.viewElem.classList.remove('loader');
 	    };
 	    View.prototype.getHeight = function () {
 	        return this.viewElem.getBoundingClientRect().height;
@@ -291,16 +297,21 @@
 	        this.posts = [];
 	        this.api = new PostApi();
 	        this.notDone = true;
-	        this.leftPage = false;
+	        this.leftPage = true;
+	        this.params = {};
 	        this.currentScrollPosition = scrollPosition.get();
 	        document.addEventListener('scroll', function () {
 	            if (_this.notDone &&
 	                _this.viewHeight / 2 < window.pageYOffset) {
-	                _this.appendOnScroll();
+	                _this.appendOnScroll(_this.params);
 	            }
 	        });
 	    }
 	    PostList.prototype.getPosts = function (params) {
+	        this.params = params;
+	        if (this.leftPage) {
+	            this.viewElem.classList.add('loader');
+	        }
 	        // check if posts are already in cache
 	        if (cache.postList && !this.notDone) {
 	            this.render(cache.postList);
@@ -312,6 +323,7 @@
 	            scrollPosition.set(this.currentScrollPosition);
 	            this.leftPage = false;
 	        }
+	        console.log(this.posts);
 	    };
 	    PostList.prototype.fetchPostsByApi = function (params) {
 	        var _this = this;
@@ -366,14 +378,18 @@
 	            return template(post);
 	        }).join('');
 	    };
-	    PostList.prototype.appendOnScroll = function () {
+	    PostList.prototype.appendOnScroll = function (params) {
 	        this.page += 1;
-	        this.getPosts({ page: this.page });
+	        params.page = this.page;
+	        this.getPosts(params);
 	    };
-	    PostList.prototype.setCache = function (config) {
+	    PostList.prototype.filterPosts = function (filterVar) {
+	        console.log(filterVar);
+	    };
+	    PostList.prototype.setCache = function (template) {
 	        // extend cache
 	        if (template && !this.notDone) {
-	            cache.postList = config.template;
+	            cache.postList = template;
 	        }
 	    };
 	    PostList.prototype.getSinglePost = function (params) {
@@ -402,14 +418,25 @@
 
 	"use strict";
 	var ApiConfig = __webpack_require__(16);
+	var cache = __webpack_require__(24);
 	var Api = (function () {
 	    function Api(type) {
 	        this.baseUrl = ApiConfig.APIURL + type;
 	    }
 	    Api.prototype.get = function (params, url) {
+	        var key;
+	        var result;
 	        url = url || this.baseUrl;
 	        url = this.addParams(params, url);
-	        return fetch(url);
+	        key = cache.generateKey(params, url);
+	        // if (cache.api[key]) {
+	        // 	result = cache.api[key];
+	        // } else {
+	        // 	result = fetch(url);
+	        // 	cache.api[key] = result;
+	        // }
+	        result = fetch(url);
+	        return result;
 	    };
 	    Api.prototype.addParams = function (params, url) {
 	        var seperator = '?';
@@ -472,8 +499,20 @@
 
 	"use strict";
 	module.exports = {
-	    postList: '',
-	    pages: {}
+	    postList: {},
+	    pages: {},
+	    api: {},
+	    categories: [],
+	    index: 0,
+	    generateKey: function (obj, url) {
+	        var key;
+	        var generatedKey = url + this.index;
+	        for (key in obj) {
+	            generatedKey += obj[key];
+	        }
+	        this.index += 1;
+	        return generatedKey;
+	    }
 	};
 
 
@@ -500,6 +539,7 @@
 	    }
 	    PostList.prototype.getPage = function (params) {
 	        var _this = this;
+	        this.viewElem.classList.add('loader');
 	        // check if page is in cache
 	        if (params.id && cache.pages[params.id]) {
 	            this.render(cache.pages[params.id]);
@@ -612,6 +652,65 @@
 	    }
 	};
 	module.exports = scrollPosition;
+
+
+/***/ },
+/* 30 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var Api = __webpack_require__(20);
+	var Category = __webpack_require__(31);
+	var cache = __webpack_require__(24);
+	var CategoryApi = (function (_super) {
+	    __extends(CategoryApi, _super);
+	    function CategoryApi() {
+	        _super.call(this, 'categories');
+	        this.categories = [];
+	    }
+	    CategoryApi.prototype.getCategories = function () {
+	        return this.get({}, '');
+	    };
+	    CategoryApi.prototype.resolveCategories = function () {
+	        var _this = this;
+	        this.getCategories()
+	            .then(function (res) {
+	            return res.json();
+	        })
+	            .then(function (res) {
+	            _this.createCategories(res);
+	            cache.categories = _this.categories();
+	        });
+	    };
+	    CategoryApi.prototype.createCategories = function (rawCategories) {
+	        var _this = this;
+	        rawCategories.forEach(function (rawCategory) {
+	            _this.categories.push(new Category(rawCategories.id, rawCategories.name));
+	        });
+	    };
+	    return CategoryApi;
+	}(Api));
+	module.exports = CategoryApi;
+
+
+/***/ },
+/* 31 */
+/***/ function(module, exports) {
+
+	"use strict";
+	var Category = (function () {
+	    function Category(id, title) {
+	        this.id = id;
+	        this.title = title;
+	    }
+	    return Category;
+	}());
+	module.exports = Category;
 
 
 /***/ }
