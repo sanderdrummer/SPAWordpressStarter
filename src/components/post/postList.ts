@@ -2,21 +2,22 @@ import PostApi = require('./postApi');
 import Post = require('./post');
 import View = require('../view');
 import template = require('./postListTemplate');
-import cache = require('../common/cache');
 import scrollPosition = require('../../services/scroll/scrollPosition');
 
 class PostList extends View{
 
 	api: PostApi;
+	cache: '';
 	template: string;
 	posts: Post[];
-	filteredPosts: Post[],
+	filteredPosts: Post[];
+	params: {};
 	page: number;
-	params:{}
 	viewHeight: number;
 	currentScrollPosition: number;
 	leftPage: boolean;
 	notDone: boolean;
+	active: boolean;
 
 	constructor() {
 		super();
@@ -45,8 +46,8 @@ class PostList extends View{
 		}
 
 		// check if posts are already in cache
-		if (cache.postList && !this.notDone) {
-			this.render(cache.postList);
+		if (this.cache && !this.notDone) {
+			this.render(this.cache);
 
 		} else {
 			this.fetchPostsByApi(params);
@@ -56,7 +57,6 @@ class PostList extends View{
 			scrollPosition.set(this.currentScrollPosition);
 			this.leftPage = false;
 		}
-		console.log(this.posts,);
 
 	}
 
@@ -75,7 +75,7 @@ class PostList extends View{
 
 				if (res.length) {
 					this.createPostList(res);
-					this.compose();
+					this.compose(this.params.category);
 					this.render(this.template);
 					this.setCache(this.template);
 					this.viewHeight = this.getHeight();
@@ -114,10 +114,10 @@ class PostList extends View{
 		});
 	}
 
-	compose() {
+	compose(category) {
 		this.sortList();
 		this.template = this.posts.map(post => {
-			return template(post);
+			return template(post, category);
 		}).join('');
 	}
 
@@ -132,10 +132,11 @@ class PostList extends View{
 	}
 
 	setCache(template) {
+
 		// extend cache
 		if (template && !this.notDone) {
-			cache.postList = template;
-		}		
+			this.cache = template;
+		}
 	}
 
 	getSinglePost(params) {

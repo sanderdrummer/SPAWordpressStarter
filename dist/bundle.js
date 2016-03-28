@@ -46,13 +46,13 @@
 
 	"use strict";
 	// require('../style/main.less');
-	var Router = __webpack_require__(12);
-	var PostList = __webpack_require__(19);
-	var PageView = __webpack_require__(25);
-	var HomeView = __webpack_require__(22);
-	var CategoryApi = __webpack_require__(30);
-	var postList = new PostList();
-	var pageView = new PageView();
+	var Router = __webpack_require__(1);
+	var PostListFactory = __webpack_require__(3);
+	var PageFactory = __webpack_require__(13);
+	var HomeView = __webpack_require__(17);
+	var CategoryApi = __webpack_require__(18);
+	var postListFactory = new PostListFactory();
+	var pageFactory = new PageFactory();
 	var homeView = new HomeView();
 	var categorieApi = new CategoryApi();
 	categorieApi.getCategories();
@@ -60,37 +60,31 @@
 	    homeView.getHome();
 	});
 	Router.register('/posts', function (params) {
+	    params.category = 'all';
+	    var postList = postListFactory.getpostList(params);
 	    postList.getPosts(params);
 	});
 	Router.register('/posts/:category', function (params) {
-	    postList.filterPosts(params);
+	    var postList = postListFactory.getpostList(params);
+	    postList.getPosts(params);
 	});
-	Router.register('/post/:id', function (params) {
+	Router.register('/post/:category/:id', function (params) {
+	    var postList = postListFactory.getpostList(params);
 	    postList.getSinglePost(params);
 	});
 	Router.register('/page/:id', function (params) {
+	    var pageView = pageFactory.getPageView(params);
 	    pageView.getPage(params);
 	});
 
 
 /***/ },
-/* 1 */,
-/* 2 */,
-/* 3 */,
-/* 4 */,
-/* 5 */,
-/* 6 */,
-/* 7 */,
-/* 8 */,
-/* 9 */,
-/* 10 */,
-/* 11 */,
-/* 12 */
+/* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var _this = this;
-	var Route = __webpack_require__(13);
+	var Route = __webpack_require__(2);
 	var routes = [];
 	var findParam = new RegExp(':[a-zA-Z]*');
 	/**
@@ -172,7 +166,7 @@
 
 
 /***/ },
-/* 13 */
+/* 2 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -187,92 +181,33 @@
 
 
 /***/ },
-/* 14 */,
-/* 15 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var Api = __webpack_require__(20);
-	var PostApi = (function (_super) {
-	    __extends(PostApi, _super);
-	    function PostApi() {
-	        _super.call(this, 'posts');
+	var PostList = __webpack_require__(4);
+	var PostListFactory = (function () {
+	    function PostListFactory() {
+	        this.postLists = {};
 	    }
-	    PostApi.prototype.getPosts = function (params) {
-	        return this.get(params, '');
+	    PostListFactory.prototype.getpostList = function (params) {
+	        var postList;
+	        if (this.postLists[params.category]) {
+	            return this.postLists[params.category];
+	        }
+	        else {
+	            postList = new PostList();
+	            this.postLists[params.category] = postList;
+	            return postList;
+	        }
 	    };
-	    return PostApi;
-	}(Api));
-	module.exports = PostApi;
-
-
-/***/ },
-/* 16 */
-/***/ function(module, exports) {
-
-	"use strict";
-	module.exports = {
-	    BASEURL: 'http://localhost/wordpress/',
-	    APIURL: '/wordpress/wp-json/wp/v2/',
-	    VIEWELEM: 'view'
-	};
-
-
-/***/ },
-/* 17 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var View = __webpack_require__(18);
-	var Post = (function (_super) {
-	    __extends(Post, _super);
-	    function Post(config) {
-	        _super.call(this);
-	        this.id = config && config.id || 0;
-	        this.title = config && config.title || '';
-	        this.content = config && config.content || '';
-	        this.excerpt = config && config.excerpt || '';
-	        this.image = config && config.image || '';
-	    }
-	    return Post;
-	}(View));
-	module.exports = Post;
-
-
-/***/ },
-/* 18 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var Config = __webpack_require__(16);
-	var View = (function () {
-	    function View() {
-	        this.viewElem = document.getElementById(Config.VIEWELEM);
-	    }
-	    View.prototype.render = function (template) {
-	        this.viewElem.innerHTML = template;
-	        this.viewElem.classList.remove('loader');
-	    };
-	    View.prototype.getHeight = function () {
-	        return this.viewElem.getBoundingClientRect().height;
-	    };
-	    return View;
+	    return PostListFactory;
 	}());
-	module.exports = View;
+	module.exports = PostListFactory;
 
 
 /***/ },
-/* 19 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -281,12 +216,11 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var PostApi = __webpack_require__(15);
-	var Post = __webpack_require__(17);
-	var View = __webpack_require__(18);
-	var template = __webpack_require__(21);
-	var cache = __webpack_require__(24);
-	var scrollPosition = __webpack_require__(29);
+	var PostApi = __webpack_require__(5);
+	var Post = __webpack_require__(9);
+	var View = __webpack_require__(10);
+	var template = __webpack_require__(11);
+	var scrollPosition = __webpack_require__(12);
 	var PostList = (function (_super) {
 	    __extends(PostList, _super);
 	    function PostList() {
@@ -313,8 +247,8 @@
 	            this.viewElem.classList.add('loader');
 	        }
 	        // check if posts are already in cache
-	        if (cache.postList && !this.notDone) {
-	            this.render(cache.postList);
+	        if (this.cache && !this.notDone) {
+	            this.render(this.cache);
 	        }
 	        else {
 	            this.fetchPostsByApi(params);
@@ -323,7 +257,6 @@
 	            scrollPosition.set(this.currentScrollPosition);
 	            this.leftPage = false;
 	        }
-	        console.log(this.posts);
 	    };
 	    PostList.prototype.fetchPostsByApi = function (params) {
 	        var _this = this;
@@ -338,7 +271,7 @@
 	            .then(function (res) {
 	            if (res.length) {
 	                _this.createPostList(res);
-	                _this.compose();
+	                _this.compose(_this.params.category);
 	                _this.render(_this.template);
 	                _this.setCache(_this.template);
 	                _this.viewHeight = _this.getHeight();
@@ -372,10 +305,10 @@
 	            return b.id - a.id;
 	        });
 	    };
-	    PostList.prototype.compose = function () {
+	    PostList.prototype.compose = function (category) {
 	        this.sortList();
 	        this.template = this.posts.map(function (post) {
-	            return template(post);
+	            return template(post, category);
 	        }).join('');
 	    };
 	    PostList.prototype.appendOnScroll = function (params) {
@@ -389,7 +322,7 @@
 	    PostList.prototype.setCache = function (template) {
 	        // extend cache
 	        if (template && !this.notDone) {
-	            cache.postList = template;
+	            this.cache = template;
 	        }
 	    };
 	    PostList.prototype.getSinglePost = function (params) {
@@ -413,12 +346,40 @@
 
 
 /***/ },
-/* 20 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var ApiConfig = __webpack_require__(16);
-	var cache = __webpack_require__(24);
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var Api = __webpack_require__(6);
+	var PostApi = (function (_super) {
+	    __extends(PostApi, _super);
+	    function PostApi() {
+	        _super.call(this, 'posts');
+	    }
+	    PostApi.prototype.getPosts = function (params) {
+	        var url = '';
+	        if (params.category && params.category != 'all') {
+	            params['filter[category_name]'] = params.category;
+	        }
+	        return this.get(params, url);
+	    };
+	    return PostApi;
+	}(Api));
+	module.exports = PostApi;
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var ApiConfig = __webpack_require__(7);
+	var cache = __webpack_require__(8);
 	var Api = (function () {
 	    function Api(type) {
 	        this.baseUrl = ApiConfig.APIURL + type;
@@ -429,12 +390,6 @@
 	        url = url || this.baseUrl;
 	        url = this.addParams(params, url);
 	        key = cache.generateKey(params, url);
-	        // if (cache.api[key]) {
-	        // 	result = cache.api[key];
-	        // } else {
-	        // 	result = fetch(url);
-	        // 	cache.api[key] = result;
-	        // }
 	        result = fetch(url);
 	        return result;
 	    };
@@ -456,50 +411,24 @@
 
 
 /***/ },
-/* 21 */
-/***/ function(module, exports) {
-
-	"use strict";
-	module.exports = function applyTemplate(post) {
-	    var template = "\n\t<div id=\"post_" + post.id + "\">\n\t\t<div class=\"grid center\">\n\t\t\t<div class=\"col-5\"><a href=\"#/post/" + post.id + "\">" + post.title + "</a> </div>\n\t\t</div>\n\t\t<div class=\"grid center\">\n\t\t\t<div class=\"col-5\">" + post.excerpt + "</div>\n\t\t\t<div class=\"col-5 hidden\">" + post.content + "</div>\n\t\t</div>\n\t</div>\n\t";
-	    return template;
-	};
-
-
-/***/ },
-/* 22 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || function (d, b) {
-	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	};
-	var View = __webpack_require__(18);
-	var template = "\n\t<div class=\"center container grid\">\n\t\t<h1>Home View</h1>\n\t\t<p> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores sed illo corporis deserunt iure tempore! Aut ut totam facere maiores eaque beatae autem error reiciendis vitae. Atque quas illum asperiores.</p>\n\t</div>\n";
-	var HomeView = (function (_super) {
-	    __extends(HomeView, _super);
-	    function HomeView() {
-	        _super.call(this);
-	        this.template = template;
-	    }
-	    HomeView.prototype.getHome = function () {
-	        this.render(this.template);
-	    };
-	    return HomeView;
-	}(View));
-	module.exports = HomeView;
-
-
-/***/ },
-/* 23 */,
-/* 24 */
+/* 7 */
 /***/ function(module, exports) {
 
 	"use strict";
 	module.exports = {
-	    postList: {},
+	    BASEURL: 'http://localhost/wordpress/',
+	    APIURL: '/wordpress/wp-json/wp/v2/',
+	    VIEWELEM: 'view'
+	};
+
+
+/***/ },
+/* 8 */
+/***/ function(module, exports) {
+
+	"use strict";
+	module.exports = {
+	    postList: '',
 	    pages: {},
 	    api: {},
 	    categories: [],
@@ -517,7 +446,7 @@
 
 
 /***/ },
-/* 25 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -526,10 +455,112 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var PageApi = __webpack_require__(26);
-	var Page = __webpack_require__(27);
-	var View = __webpack_require__(18);
-	var cache = __webpack_require__(24);
+	var View = __webpack_require__(10);
+	var Post = (function (_super) {
+	    __extends(Post, _super);
+	    function Post(config) {
+	        _super.call(this);
+	        this.id = config && config.id || 0;
+	        this.title = config && config.title || '';
+	        this.content = config && config.content || '';
+	        this.excerpt = config && config.excerpt || '';
+	        this.image = config && config.image || '';
+	    }
+	    return Post;
+	}(View));
+	module.exports = Post;
+
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var Config = __webpack_require__(7);
+	var View = (function () {
+	    function View() {
+	        this.viewElem = document.getElementById(Config.VIEWELEM);
+	    }
+	    View.prototype.render = function (template) {
+	        this.viewElem.innerHTML = template;
+	        this.viewElem.classList.remove('loader');
+	    };
+	    View.prototype.getHeight = function () {
+	        return this.viewElem.getBoundingClientRect().height;
+	    };
+	    return View;
+	}());
+	module.exports = View;
+
+
+/***/ },
+/* 11 */
+/***/ function(module, exports) {
+
+	"use strict";
+	module.exports = function applyTemplate(post, category) {
+	    var template = "\n\t<div id=\"post_" + post.id + "\">\n\t\t<div class=\"grid center\">\n\t\t\t<div class=\"col-5\"><a href=\"#/post/" + category + "/" + post.id + "\">" + post.title + "</a> </div>\n\t\t</div>\n\t\t<div class=\"grid center\">\n\t\t\t<div class=\"col-5\">" + post.excerpt + "</div>\n\t\t\t<div class=\"col-5 hidden\">" + post.content + "</div>\n\t\t</div>\n\t</div>\n\t";
+	    return template;
+	};
+
+
+/***/ },
+/* 12 */
+/***/ function(module, exports) {
+
+	"use strict";
+	var scrollPosition = {
+	    get: function () {
+	        return document.documentElement.scrollTop || document.body.scrollTop;
+	    },
+	    set: function (position) {
+	        setTimeout(function () {
+	            scrollTo(0, position);
+	        }, 100);
+	    }
+	};
+	module.exports = scrollPosition;
+
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var PageView = __webpack_require__(14);
+	var PageFactory = (function () {
+	    function PageFactory() {
+	        this.pages = {};
+	    }
+	    PageFactory.prototype.getPageView = function (params) {
+	        var pageView;
+	        if (this.pages[params.id]) {
+	            return this.pages[params.id];
+	        }
+	        else {
+	            pageView = new PageView();
+	            this.pages[params.id] = pageView;
+	            return pageView;
+	        }
+	    };
+	    return PageFactory;
+	}());
+	module.exports = PageFactory;
+
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var PageApi = __webpack_require__(15);
+	var Page = __webpack_require__(16);
+	var View = __webpack_require__(10);
 	var PostList = (function (_super) {
 	    __extends(PostList, _super);
 	    function PostList() {
@@ -541,8 +572,8 @@
 	        var _this = this;
 	        this.viewElem.classList.add('loader');
 	        // check if page is in cache
-	        if (params.id && cache.pages[params.id]) {
-	            this.render(cache.pages[params.id]);
+	        if (this.cache) {
+	            this.render(this.cache);
 	        }
 	        else {
 	            // fetch posts by api
@@ -569,7 +600,7 @@
 	    PostList.prototype.setCache = function () {
 	        // extend cache
 	        if (this.template && this.page.id) {
-	            cache.pages[this.page.id] = this.template;
+	            this.cache = this.template;
 	        }
 	    };
 	    PostList.prototype.applyTemplate = function (page) {
@@ -582,7 +613,7 @@
 
 
 /***/ },
-/* 26 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -591,7 +622,7 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var Api = __webpack_require__(20);
+	var Api = __webpack_require__(6);
 	var PageApi = (function (_super) {
 	    __extends(PageApi, _super);
 	    function PageApi() {
@@ -611,7 +642,7 @@
 
 
 /***/ },
-/* 27 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -620,7 +651,7 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var View = __webpack_require__(18);
+	var View = __webpack_require__(10);
 	var Page = (function (_super) {
 	    __extends(Page, _super);
 	    function Page(config) {
@@ -636,26 +667,7 @@
 
 
 /***/ },
-/* 28 */,
-/* 29 */
-/***/ function(module, exports) {
-
-	"use strict";
-	var scrollPosition = {
-	    get: function () {
-	        return document.documentElement.scrollTop || document.body.scrollTop;
-	    },
-	    set: function (position) {
-	        setTimeout(function () {
-	            scrollTo(0, position);
-	        }, 100);
-	    }
-	};
-	module.exports = scrollPosition;
-
-
-/***/ },
-/* 30 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -664,9 +676,35 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var Api = __webpack_require__(20);
-	var Category = __webpack_require__(31);
-	var cache = __webpack_require__(24);
+	var View = __webpack_require__(10);
+	var template = "\n\t<div class=\"center container grid\">\n\t\t<h1>Home View</h1>\n\t\t<p> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores sed illo corporis deserunt iure tempore! Aut ut totam facere maiores eaque beatae autem error reiciendis vitae. Atque quas illum asperiores.</p>\n\t</div>\n";
+	var HomeView = (function (_super) {
+	    __extends(HomeView, _super);
+	    function HomeView() {
+	        _super.call(this);
+	        this.template = template;
+	    }
+	    HomeView.prototype.getHome = function () {
+	        this.render(this.template);
+	    };
+	    return HomeView;
+	}(View));
+	module.exports = HomeView;
+
+
+/***/ },
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var Api = __webpack_require__(6);
+	var Category = __webpack_require__(19);
+	var cache = __webpack_require__(8);
 	var CategoryApi = (function (_super) {
 	    __extends(CategoryApi, _super);
 	    function CategoryApi() {
@@ -699,7 +737,7 @@
 
 
 /***/ },
-/* 31 */
+/* 19 */
 /***/ function(module, exports) {
 
 	"use strict";

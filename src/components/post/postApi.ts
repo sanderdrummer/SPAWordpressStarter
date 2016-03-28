@@ -8,7 +8,14 @@ class PostApi extends Api{
 	}
 
 	getPosts(params:Object) {
-		return this.get(params, '');
+
+		var url = '';
+
+		if (params.category && params.category != 'all') {
+			params['filter[category_name]'] = params.category;
+		}
+
+		return this.get(params, url);
 	}
 }
 

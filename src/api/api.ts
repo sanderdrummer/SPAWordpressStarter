@@ -16,15 +16,6 @@ class Api {
 		url = this.addParams(params, url);
 
 		key = cache.generateKey(params, url);
-
-		// if (cache.api[key]) {
-
-		// 	result = cache.api[key];
-
-		// } else {
-		// 	result = fetch(url);
-		// 	cache.api[key] = result;
-		// }
 		
 		result = fetch(url);
 
