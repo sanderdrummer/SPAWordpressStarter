@@ -8,10 +8,19 @@ body *::selection,
     background: @highlight;
 }
 
+.serif{
+  color: @lightGrey;
+  font-family: 'Poiret One', serif;
+}
+
+.fancyMe{
+  font-family: 'Poiret One', serif;
+}
+
 .doTypo(@baseFontSize){
   html {
-    font-family: 'Raleway', sans-serif;
-    font-weight: 300;
+    // font-family: 'Poiret One', cursive;
+    font-family: 'Open Sans', sans-serif;
     font-size: @baseFontSize / 16 * 100%;
     -webkit-font-smoothing: antialiased;
     color: @darkGrey;
@@ -48,7 +57,7 @@ body *::selection,
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Lato', sans-serif;
+    font-family: 'Poiret One', serif;
     margin-top: @leading;
     font-weight: 300;
     margin-bottom: 0;
@@ -92,6 +101,10 @@ body *::selection,
 
   .lead {
     font-size: @scale * 1rem;
+    color: @lightGrey;
+    font-family: 'Open Sans', sans-serif;
+    // font-family: 'Poiret One', cursive;
+    // font-family: 'Cinzel', serif;
   }
 
 }
@@ -136,12 +149,12 @@ a, a.ttd{
 }
 
 @media only screen and (min-width: 10px) {
-  .doTypo(14); 
+  .doTypo(12); 
 }
 @media only screen and (min-width: 768px) {
-  .doTypo(18); 
+  .doTypo(14); 
 }
 
 @media only screen and (min-width:1224px) {
-  .doTypo(24); 
+  .doTypo(20); 
 }

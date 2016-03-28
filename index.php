@@ -45,5 +45,6 @@
       src="<?php bloginfo('template_url'); ?>/src/polyfills/fetch.js" charset="utf-8"></script>
     <script type="text/javascript" 
       src="<?php bloginfo('template_url'); ?>/dist/bundle.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Poiret+One|Open+Sans' rel='stylesheet' type='text/css'>
   </body>
 </html>
