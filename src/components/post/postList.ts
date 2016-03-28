@@ -2,6 +2,7 @@ import PostApi = require('./postApi');
 import Post = require('./post');
 import View = require('../view');
 import template = require('./postListTemplate');
+import postTemplate = require('./postTemplate');
 import scrollPosition = require('../../services/scroll/scrollPosition');
 
 class PostList extends View{
@@ -32,6 +33,7 @@ class PostList extends View{
 
 		document.addEventListener('scroll', () => {
 			if (this.notDone && 
+				this.active &&
 				this.viewHeight / 2 < window.pageYOffset) {
 				this.appendOnScroll(this.params);
 			}
@@ -143,7 +145,7 @@ class PostList extends View{
 		this.currentScrollPosition = scrollPosition.get();
 		this.leftPage = true;
 		var post = this.getPostById(this.posts, params.id);
-		post.render(template(post));
+		post.render(postTemplate(post, params.category));
 	}
 
 	getPostById(list, id) {

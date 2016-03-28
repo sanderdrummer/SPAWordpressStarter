@@ -1,21 +1,21 @@
+import Factory = require('../../factory');
 import PostList = require('./postList');
 
-class PostListFactory {
-	postLists: {}
+class PostListFactory extends Factory{
 
 	constructor() {
-		this.postLists = {};
+		super();
 	}
 
 	getpostList(params) {
 
 		var postList;
 
-		if (this.postLists[params.category]) {
-			return this.postLists[params.category]
+		if (this.collection[params.category]) {
+			return this.collection[params.category]
 		} else {
 			postList = new PostList();
-			this.postLists[params.category] = postList;
+			this.collection[params.category] = postList;
 			return postList;
 		}
 	}

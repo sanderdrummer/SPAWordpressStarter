@@ -58,17 +58,16 @@ class PostList extends View{
 
 	applyTemplate(page: Page) {
 		var template = `
-		<div id="page_${page.id}">
-			<img src="${page.image}" alt="" />
-			<div class="grid center">
-				<div class="col-5">${page.title}</div>
+		<div id="page_${page.id}" class="box grid">
+			<div class="col-12">
+				<h1>${page.title}</h1>
+				<img src="${page.image}" alt="" />
 			</div>
 			<div class="grid center">
 				<div class="col-12">${page.content}</div>
 			</div>
 		</div>
 		`;
-
 		return template;
 	}
 

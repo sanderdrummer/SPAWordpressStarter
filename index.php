@@ -38,7 +38,7 @@
         </ul>
       </nav>
     </header>
-    <div id="view"></div>
+    <div id="view" class="container"></div>
     <footer>
     </footer>
     <script type="text/javascript" 

@@ -1,21 +1,21 @@
+import Factory = require('../../factory');
 import PageView = require('./pageView');
 
-class PageFactory {
-	pages: {}
+class PageFactory extends Factory {
 
 	constructor() {
-		this.pages = {};
+		super();
 	}
 
 	getPageView(params) {
 		
 		var pageView;
 
-		if( this.pages[params.id]) {
-			return this.pages[params.id]
+		if( this.collection[params.id]) {
+			return this.collection[params.id]
 		} else {
 			pageView = new PageView();
-			this.pages[params.id] = pageView;
+			this.collection[params.id] = pageView;
 			return pageView;
 		}
 	}
