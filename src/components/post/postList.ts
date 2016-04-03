@@ -47,7 +47,7 @@ class PostList extends View{
 			this.viewElem.classList.add('loader');
 		}
 
-		// check if posts are already in cache
+		// Check if posts are already in cache
 		if (this.cache && !this.notDone) {
 			this.render(this.cache);
 

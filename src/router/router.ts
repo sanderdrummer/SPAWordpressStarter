@@ -99,7 +99,6 @@ class Router {
     /**
      */
     handleHashChange(){
-        console.log(this);
         const hash =  window.location.hash.replace('#', '');
         this.routes.forEach( (route) => {    
             this.parseRouteUrl(hash, route);
@@ -107,7 +106,6 @@ class Router {
     }
 
     register(url: string, callback) {
-        console.log(this, this.routes);
         this.routes.push(new Route(url, callback));
         return this;
     }

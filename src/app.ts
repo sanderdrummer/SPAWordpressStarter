@@ -47,7 +47,6 @@ router.register('/', (params) => {
 });
 
 function onRouteChange(view) {
-	console.log(view);
 	pageFactory.resetActive();
 	postListFactory.resetActive();
 	view.active = true;
