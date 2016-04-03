@@ -10,7 +10,7 @@
   <body>
     <header>
       <nav class="main">
-        <ul class="nav">
+        <ul id="nav" class="nav">
           <li><a href="#/">Home</a></li>
           <li><a href="#/static">StaticTest</a></li>
           <li><a href="#/posts">post</a></li>
