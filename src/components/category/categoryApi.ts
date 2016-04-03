@@ -22,7 +22,7 @@ class CategoryApi extends Api{
 		})
 		.then((res) => {
 			this.createCategories(res);
-			cache.categories = this.categories();
+			cache.categories = this.categories;
 		})
 	}
 

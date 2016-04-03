@@ -1,4 +1,4 @@
-import Config = require('../api/config');
+import Config = require('../config');
 
 class View {
 	viewElem: Element;

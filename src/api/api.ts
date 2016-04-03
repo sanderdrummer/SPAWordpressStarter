@@ -1,11 +1,11 @@
-import ApiConfig = require('./config');
+import Config = require('../config');
 import cache = require('../components/common/cache');
 
 class Api {
 	baseUrl: string;
 
 	constructor(type) {
-		this.baseUrl = ApiConfig.APIURL + type;
+		this.baseUrl = Config.APIURL + type;
 	}
 
 	get(params: Object, url:string) {

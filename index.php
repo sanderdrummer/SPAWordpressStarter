@@ -6,22 +6,6 @@
     <title>Test</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" 
-      href="<?php bloginfo('template_url'); ?>/dist/main.css" media="screen" charset="utf-8">
-    <style>
-
-      .hidden{
-        display: none;
-      }
-      .loader{
-        display: none;
-      }
-      .loader:after{
-        width: 100%;
-        height: 100%;
-        background-color: blue;
-        content: 'loading';
-      }
-    </style>
   </head>
   <body>
     <header>
