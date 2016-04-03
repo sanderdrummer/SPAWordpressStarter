@@ -28,6 +28,7 @@
       <nav class="main">
         <ul class="nav">
           <li><a href="#/">Home</a></li>
+          <li><a href="#/static">StaticTest</a></li>
           <li><a href="#/posts">post</a></li>
           <li><a href="#/posts/blog">blog</a></li>
           <li><a href="#/posts/gigs">gigs</a></li>

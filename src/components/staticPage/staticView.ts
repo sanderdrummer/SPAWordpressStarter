@@ -9,7 +9,7 @@ class StaticView extends View {
 		this.template = template || '';
 	}
 
-	getHome(){
+	getPage(){
 		this.render(this.template)
 	}
 
