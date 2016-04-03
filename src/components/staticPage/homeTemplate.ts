@@ -1,6 +1,4 @@
-import View = require('./view');
-
-var template = `
+var homeTemplate = `
 	<div class="grid box">
 		<h1 class="serif">Home View</h1>
 		<p class="lead"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores sed illo corporis deserunt iure tempore! Aut ut totam facere maiores eaque beatae autem error reiciendis vitae. Atque quas illum asperiores.</p>		
@@ -9,19 +7,4 @@ var template = `
 	</div>
 `
 
-class HomeView extends View {
-
-	template: string;
-
-	constructor(){
-		super();
-		this.template = template;
-	}
-
-	getHome(){
-		this.render(this.template)
-	}
-
-}
-
-export = HomeView;
+export = homeTemplate;

@@ -4,16 +4,21 @@ require('../style/main.less');
 import Router = require('./router/router');
 import PostListFactory = require('./components/post/postListFactory');
 import PageFactory = require('./components/page/pageFactory');
-import HomeView = require('./components/homeView');
+import StaticView = require('./components/staticPage/staticView');
+import homeTemplate = require('./components/staticPage/homeTemplate');
 import CategoryApi = require('./components/category/categoryApi');
 
 var postListFactory = new PostListFactory();
 var pageFactory = new PageFactory();
-var homeView = new HomeView();
+var homeView = new StaticView(homeTemplate);
+
 var categorieApi = new CategoryApi();
 
-window.location.hash = '#/';
-// categorieApi.getCategories();
+if (!window.location.hash) {
+
+	window.location.hash = '#/';
+}
+
 
 Router.register('/', (params) => {
 	onRouteChange(homeView);
