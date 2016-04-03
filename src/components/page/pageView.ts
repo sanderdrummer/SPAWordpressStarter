@@ -8,7 +8,6 @@ class PostList extends View{
 	templateString: string;
 	page: Page;
 	cache: string;
-	active: boolean;
 
 	constructor() {
 		super();

@@ -9,6 +9,7 @@ import homeTemplate = require('./components/staticPage/homeTemplate');
 import staticTemplate = require('./components/staticPage/staticTemplate');
 import CategoryApi = require('./components/category/categoryApi');
 
+
 var postListFactory = new PostListFactory();
 var pageFactory = new PageFactory();
 var homeView = new StaticView(homeTemplate);
@@ -21,8 +22,6 @@ if (!window.location.hash) {
 
 	window.location.hash = '#/';
 }
-
-
 router.register('/', (params) => {
 	onRouteChange(homeView);
 	homeView.getPage();
