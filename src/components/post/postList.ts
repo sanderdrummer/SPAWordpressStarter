@@ -97,13 +97,7 @@ class PostList extends View{
 			rawPost = rawPosts[index];
 			if (rawPost && 
 				!this.getPostById(this.posts, rawPost.id)) {
-				this.posts.push(new Post({
-					id: rawPost.id,
-					title: rawPost.title.rendered,
-					content: rawPost.content.rendered,
-					excerpt: rawPost.excerpt.rendered,
-					image: rawPost.featured_media
-				}));
+				this.posts.push(new Post(rawPost));
 			}
 
 			index += 1;
