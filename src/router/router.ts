@@ -1,102 +1,117 @@
 import Route = require('./route');
 
-const routes = [];
-const findParam =  new RegExp(':[a-zA-Z]*');
+class Router {
 
-/**
- * Parse hash and url and check for matching
- * 
- * @param  {string}   hash
- * @param  {Route}   route
- * @return {void}
- */
-function parseRouteUrl(hash:string, route:Route){
-    
-    var result = getMatchAndParamsOf(hash, route.url);
+    routes: Route[];
+    findParam: RegExp;
 
-    if (result.doesMatch) {
+    constructor(){
+        this.routes = [];
+        this.findParam = new RegExp(':[a-zA-Z]*');
+
+        // Adds global eventlistener for routing on hashchange
+        window.addEventListener('hashchange', () => {
+            this.handleHashChange();
+        });
+
+        // Special case load handle Hashchange on startup
+        document.addEventListener("DOMContentLoaded", () => { 
+            this.handleHashChange();
+        });
+    }
+
+
+    /**
+     * Parse hash and url and check for matching
+     * 
+     * @param  {string}   hash
+     * @param  {Route}   route
+     * 
+     * @return {void}
+     */
+    parseRouteUrl(hash: string, route: Route) {
+
+        var result = this.getMatchAndParamsOf(hash, route.url);
+
+        if (result.doesMatch) {
+
+            route.callback(result.params);
+        }
+    }
+
+
+    /**
+     * Checks if route matches hash 
+     * and parses params from hash
+     * 
+     * @param  {string}   hash 
+     * @param  {string}   url  
+     * @return {Object}        
+     */
+    getMatchAndParamsOf(hash:string , url:string ) {
         
-        route.callback(result.params);
-    } 
-}
-
-/**
- * Checks if route matches hash 
- * and parses params from hash
- * 
- * @param  {string}   hash 
- * @param  {string}   url  
- * @return {Object}        
- */
-function getMatchAndParamsOf(hash:string , url:string ) {
-    
-    var urlParts = url.split('/');
-    var hashParts = hash.split('/');
-    var doesMatch = false;
-    var params = {};
-    var allMatches = [];
-    var key;
-    
-    // do both hash and url have the same size ?
-    // -> could match  
-    if (urlParts.length === hashParts.length) {
+        var urlParts = url.split('/');
+        var hashParts = hash.split('/');
+        var doesMatch = false;
+        var params = {};
+        var allMatches = [];
+        var key;
         
-        // check all parts of given hash for matching if 
-        // a part is indentified to be a param it is ignored 
-        // for matching but saved into params Object
-        hashParts.map((item, index) => {
+        // do both hash and url have the same size ?
+        // -> could match  
+        if (urlParts.length === hashParts.length) {
             
-            if (item === urlParts[index]) {
+            // check all parts of given hash for matching if 
+            // a part is indentified to be a param it is ignored 
+            // for matching but saved into params Object
+            hashParts.map((item, index) => {
+                
+                if (item === urlParts[index]) {
 
-                allMatches.push(true);
-                
-            } else if(findParam.test(urlParts[index])) {
-                
-                // replace : indicator of param key
-                key = urlParts[index].replace(':', '');
-                params[key] = item
-                
-            } else {
-                allMatches.push(false);
-            }
-        });
+                    allMatches.push(true);
+                    
+                } else if(this.findParam.test(urlParts[index])) {
+                    
+                    // replace : indicator of param key
+                    key = urlParts[index].replace(':', '');
+                    params[key] = item
+                    
+                } else {
+                    allMatches.push(false);
+                }
+            });
+            
+            // reduce all matchings to one boolean
+            doesMatch = allMatches.reduce((a,b) =>{
+                return a && b;
+            });
+                    
+        }
         
-        // reduce all matchings to one boolean
-        doesMatch = allMatches.reduce((a,b) =>{
-            return a && b;
+        // return doesMatch flag and parsed params
+        return {
+            params: params,
+            doesMatch: doesMatch
+        }
+        
+    }
+
+    /**
+     */
+    handleHashChange(){
+        console.log(this);
+        const hash =  window.location.hash.replace('#', '');
+        this.routes.forEach( (route) => {    
+            this.parseRouteUrl(hash, route);
         });
-                
     }
-    
-    // return doesMatch flag and parsed params
-    return {
-        params: params,
-        doesMatch: doesMatch
-    }
-    
-}
 
-/**
- */
-function handleHashChange(){
-    const hash =  window.location.hash.replace('#', '');
-    routes.forEach( (route) => {    
-        parseRouteUrl(hash, route);
-    });
-}
-
-// Adds global eventlistener for routing on hashchange
-window.addEventListener('hashchange', handleHashChange);
-
-// special case for startup
-document.addEventListener("DOMContentLoaded", handleHashChange);
-
-
-
-// exports public api to register new route
-export = {
-    register: (url:string, callback) => {
-        routes.push(new Route(url, callback));
+    register(url: string, callback) {
+        console.log(this, this.routes);
+        this.routes.push(new Route(url, callback));
         return this;
     }
-};
+}
+
+// exports public api to register new route
+export = Router

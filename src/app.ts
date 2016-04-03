@@ -11,6 +11,7 @@ import CategoryApi = require('./components/category/categoryApi');
 var postListFactory = new PostListFactory();
 var pageFactory = new PageFactory();
 var homeView = new StaticView(homeTemplate);
+var router = new Router();
 
 var categorieApi = new CategoryApi();
 
@@ -20,26 +21,26 @@ if (!window.location.hash) {
 }
 
 
-Router.register('/', (params) => {
+router.register('/', (params) => {
 	onRouteChange(homeView);
 	homeView.getHome();
-});
-Router.register('/posts', (params) => {
+})
+.register('/posts', (params) => {
 	params.category = 'all';
 	var postList = postListFactory.getpostList(params);
 	onRouteChange(postList);
 	postList.getPosts(params);
-});
-Router.register('/posts/:category', (params) => {
+})
+.register('/posts/:category', (params) => {
 	var postList = postListFactory.getpostList(params);
 	onRouteChange(postList);
 	postList.getPosts(params);
-});
-Router.register('/post/:category/:id', (params) => {
+})
+.register('/post/:category/:id', (params) => {
 	var postList = postListFactory.getpostList(params);
 	postList.getSinglePost(params);
-});
-Router.register('/page/:id', (params) => {
+})
+.register('/page/:id', (params) => {
 	var pageView = pageFactory.getPageView(params);
 	onRouteChange(pageView);
 	pageView.getPage(params);
