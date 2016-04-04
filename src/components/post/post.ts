@@ -13,12 +13,13 @@ class Post extends View{
 	constructor(config: any){
 		super();
 		this.id = config && config.id || 0;
-		this.title = config && config.title || '';
-		this.content = config && config.content || '';
-		this.excerpt = config && config.excerpt || '';
-		this.image = config && config.image || '';
+		this.title = config && config.title && config.title.rendered || '';
+		this.content = config && config.content && 
+			config.content.rendered || '';
+		this.excerpt = config && config.excerpt && 
+			config.excerpt.rendered || '';
+		this.image = config && config.featured_media || '';
 	}
-
 }
 
 export = Post;

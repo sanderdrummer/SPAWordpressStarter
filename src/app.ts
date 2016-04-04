@@ -4,12 +4,20 @@ require('../style/main.less');
 import Router = require('./router/router');
 import PostListFactory = require('./components/post/postListFactory');
 import PageFactory = require('./components/page/pageFactory');
-import HomeView = require('./components/homeView');
+import StaticView = require('./components/staticPage/staticView');
+import homeTemplate = require('./components/staticPage/homeTemplate');
+import staticTemplate = require('./components/staticPage/staticTemplate');
 import CategoryApi = require('./components/category/categoryApi');
+
 
 var postListFactory = new PostListFactory();
 var pageFactory = new PageFactory();
 var homeView = new HomeView();
+var homeView = new StaticView(homeTemplate);
+var staticView = new StaticView(staticTemplate);
+var router = new Router();
+
+var categorieApi = new CategoryApi();
 
 // set default route to home if no route is present
 if (!window.location.hash) {
@@ -17,25 +25,34 @@ if (!window.location.hash) {
 }
 
 Router.register('/', ({}) => {
+if (!window.location.hash) {
+
+	window.location.hash = '#/';
+}
+router.register('/', (params) => {
 	onRouteChange(homeView);
-	homeView.getHome();
-});
-Router.register('/posts', (params) => {
+	homeView.getPage();
+})
+.register('/static', (params) => {
+	var postList = postListFactory.getpostList(params);
+	onRouteChange(staticView);
+	staticView.getPage();
+}).register('/posts', (params) => {
 	params.category = 'all';
 	var postList = postListFactory.getpostList(params);
 	onRouteChange(postList);
 	postList.getPosts(params);
-});
-Router.register('/posts/:category', (params) => {
+})
+.register('/posts/:category', (params) => {
 	var postList = postListFactory.getpostList(params);
 	onRouteChange(postList);
 	postList.getPosts(params);
-});
-Router.register('/post/:category/:id', (params) => {
+})
+.register('/post/:category/:id', (params) => {
 	var postList = postListFactory.getpostList(params);
 	postList.getSinglePost(params);
-});
-Router.register('/page/:id', (params) => {
+})
+.register('/page/:id', (params) => {
 	var pageView = pageFactory.getPageView(params);
 	onRouteChange(pageView);
 	pageView.getPage(params);

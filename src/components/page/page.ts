@@ -12,9 +12,10 @@ class Page extends View{
 	constructor(config: any){
 		super();
 		this.id = config && config.id || '';
-		this.title = config && config.title || '';
-		this.content = config && config.content || '';
-		this.image = config && config.image || '';
+		this.title = config && config.title && config.title.rendered || '';
+		this.content = config && config.content && 
+			config.content.rendered || '';
+		this.image = config && config.featured_media || '';
 
 	}
 

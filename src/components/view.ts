@@ -1,8 +1,9 @@
-import Config = require('../api/config');
+import Config = require('../config');
 
 class View {
 	viewElem: Element;
 	scroll:any;
+	active: boolean;
 
 	constructor() {
 		this.viewElem = document.getElementById(Config.VIEWELEM);

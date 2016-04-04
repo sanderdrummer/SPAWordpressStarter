@@ -4,20 +4,21 @@ class Router {
 
     routes: Route[];
     findParam: RegExp;
+    activeRoute: Route
 
     constructor(){
         this.routes = [];
         this.findParam = new RegExp(':[a-zA-Z]*');
 
-        // Adds global eventlistener for routing on hashchange
-        window.addEventListener('hashchange', () => {
-            this.handleHashChange();
-        });
+        // // Adds global eventlistener for routing on hashchange
+        // window.addEventListener('hashchange', () => {
+        //     this.handleHashChange();
+        // });
 
-        // Special case load handle Hashchange on startup
-        document.addEventListener("DOMContentLoaded", () => { 
-            this.handleHashChange();
-        });
+        // // Special case load handle Hashchange on startup
+        // document.addEventListener("DOMContentLoaded", () => {
+        //     this.handleHashChange();
+        // });
     }
 
 
@@ -34,8 +35,9 @@ class Router {
         var result = this.getMatchAndParamsOf(hash, route.url);
 
         if (result.doesMatch) {
-
-            route.callback(result.params);
+            route.setParams(result.params);
+            route.view.active = true;
+            this.activeRoute = route;
         }
     }
 
@@ -105,8 +107,8 @@ class Router {
         });
     }
 
-    register(url: string, callback) {
-        this.routes.push(new Route(url, callback));
+    register(config) {
+        this.routes.push(new Route(config));
         return this;
     }
 }

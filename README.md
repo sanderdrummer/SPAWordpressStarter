@@ -1,1 +1,1 @@
-# Advocat
+# SinglePage Framework with TypeScript and Wordpress

@@ -5,14 +5,13 @@ import View = require('../view');
 class PostList extends View{
 
 	api: PageApi;
-	template: string;
+	templateString: string;
 	page: Page;
 	cache: string;
-	active: boolean;
 
 	constructor() {
 		super();
-		this.template = '';
+		this.templateString = '';
 		this.api = new PageApi();
 	}
 
@@ -25,34 +24,27 @@ class PostList extends View{
 			this.render(this.cache);
 
 		} else {
+
 			// fetch posts by api
 			this.api.getPage(params)
 				.then((res) => {
 					return res.json();
 				})
 				.then((res) => {
-					this.createPage(res);
-					this.template = this.applyTemplate(this.page)
-					this.render(this.template);
+					this.page = new Page(res);
+					this.templateString = this.applyTemplate(this.page)
+					this.render(this.templateString);
 					this.setCache();
 				});
 		}
 
 	}
 
-	createPage(rawPage: Object) {
-		this.page = new Page({
-			id: rawPage.id,
-			title: rawPage.title.rendered,
-			content: rawPage.content.rendered,
-			image: rawPage.featured_media
-		});
-	}
-
 	setCache() {
-		// extend cache
-		if (this.template && this.page.id) {
-			this.cache = this.template;
+
+		// set cache
+		if (this.templateString && this.page.id) {
+			this.cache = this.templateString;
 		}
 	}
 

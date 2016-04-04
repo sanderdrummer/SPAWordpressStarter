@@ -47,7 +47,7 @@ class PostList extends View{
 			this.viewElem.classList.add('loader');
 		}
 
-		// check if posts are already in cache
+		// Check if posts are already in cache
 		if (this.cache && !this.notDone) {
 			this.render(this.cache);
 
@@ -97,13 +97,7 @@ class PostList extends View{
 			rawPost = rawPosts[index];
 			if (rawPost && 
 				!this.getPostById(this.posts, rawPost.id)) {
-				this.posts.push(new Post({
-					id: rawPost.id,
-					title: rawPost.title.rendered,
-					content: rawPost.content.rendered,
-					excerpt: rawPost.excerpt.rendered,
-					image: rawPost.featured_media
-				}));
+				this.posts.push(new Post(rawPost));
 			}
 
 			index += 1;
@@ -146,6 +140,7 @@ class PostList extends View{
 		this.leftPage = true;
 		var post = this.getPostById(this.posts, params.id);
 		post.render(postTemplate(post, params.category));
+		scrollPosition.set(0);
 	}
 
 	getPostById(list, id) {
