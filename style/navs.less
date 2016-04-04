@@ -24,7 +24,11 @@ ul.nav{
 
 nav.main{
     width: 100%;
-    position: relative;
     background-color: @highlight;
     height: 2*@leading;
+    box-shadow: 2px 2px 8px @darkGrey;
+    z-index: 1000;
+  &.fixed{
+      position: fixed;
+  }
 }

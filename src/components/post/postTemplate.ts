@@ -5,7 +5,7 @@ export = function applyTemplate(post:Post, category) {
 	<div id="post_${post.id}" class="box">
 		<div class="grid">
 		<div class="col-12">
-			<h1 class="serif hug">${post.title}</h1>
+			<h2 class="serif hug">${post.title}</h2>
 			${post.image ? `<img src=${post.image}>` : ''}
 		</div>
 		</div>

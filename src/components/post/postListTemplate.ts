@@ -6,9 +6,9 @@ export = function applyTemplate(post:Post, category) {
 		<div class="grid">
 			<div class="col-12">
 				<a href="#/post/${category}/${post.id}">
-				<h1 class="hug">
+				<h2 class="hug">
 					${post.title}
-				</h1>	
+				</h2>	
 				${post.image ? `<img src=${post.image}>`:''}
 				</a> 
 			</div>

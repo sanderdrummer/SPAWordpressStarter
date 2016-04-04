@@ -42,7 +42,7 @@ function getMatchAndParamsOf(hash:string , url:string ) {
     if (urlParts.length === hashParts.length) {
         
         // check all parts of given hash for matching if 
-        // a part is indentified to be a param it is ignored 
+        // a part is identified to be a param it is ignored
         // for matching but saved into params Object
         hashParts.map((item, index) => {
             
@@ -61,7 +61,7 @@ function getMatchAndParamsOf(hash:string , url:string ) {
             }
         });
         
-        // reduce all matchings to one boolean
+        // reduce all matching booleans to one boolean
         doesMatch = allMatches.reduce((a,b) =>{
             return a && b;
         });
@@ -85,7 +85,7 @@ function handleHashChange(){
     });
 }
 
-// Adds global eventlistener for routing on hashchange
+// Adds global eventListener for routing on hashchange
 window.addEventListener('hashchange', handleHashChange);
 
 // special case for startup

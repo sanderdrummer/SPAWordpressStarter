@@ -9,6 +9,6 @@ var scrollPosition = {
 			scrollTo(0, position)
 		},100);
 	}
-}
+};
 
 export = scrollPosition;

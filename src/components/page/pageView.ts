@@ -61,7 +61,7 @@ class PostList extends View{
 		<div id="page_${page.id}" class="box">
 			<div class="grid">
 				<div class="col-12">
-					<h1>${page.title}</h1>
+					<h2>${page.title}</h2>
 					<img src="${page.image}" alt="" />
 				</div>
 			</div>

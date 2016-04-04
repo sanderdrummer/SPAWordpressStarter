@@ -10,12 +10,13 @@ import CategoryApi = require('./components/category/categoryApi');
 var postListFactory = new PostListFactory();
 var pageFactory = new PageFactory();
 var homeView = new HomeView();
-var categorieApi = new CategoryApi();
 
-window.location.hash = '#/';
-// categorieApi.getCategories();
+// set default route to home if no route is present
+if (!window.location.hash) {
+    window.location.hash = '#/';
+}
 
-Router.register('/', (params) => {
+Router.register('/', ({}) => {
 	onRouteChange(homeView);
 	homeView.getHome();
 });
@@ -41,7 +42,6 @@ Router.register('/page/:id', (params) => {
 });
 
 function onRouteChange(view) {
-	console.log(view);
 	pageFactory.resetActive();
 	postListFactory.resetActive();
 	view.active = true;
