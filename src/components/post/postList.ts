@@ -4,6 +4,7 @@ import View = require('../view');
 import template = require('./postListTemplate');
 import postTemplate = require('./postTemplate');
 import scrollPosition = require('../../services/scroll/scrollPosition');
+import Param = require('../router/param');
 
 class PostList extends View{
 
@@ -40,7 +41,7 @@ class PostList extends View{
 		});
 	}
 
-	getPosts(params:Object) {
+	getPosts(params:Param) {
 		this.params = params;
 
 		if (this.leftPage) {
@@ -62,7 +63,7 @@ class PostList extends View{
 
 	}
 
-	fetchPostsByApi(params: Object) {
+	fetchPostsByApi(params: Param) {
 
 		// extend params
 		params = params || {};
@@ -135,7 +136,7 @@ class PostList extends View{
 		}
 	}
 
-	getSinglePost(params) {
+	getSinglePost(params:Param) {
 		this.currentScrollPosition = scrollPosition.get();
 		this.leftPage = true;
 		var post = this.getPostById(this.posts, params.id);

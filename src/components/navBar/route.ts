@@ -1,4 +1,4 @@
-import Params = require('./params');
+import Params = require('./../../router/param');
 import View = require('../view');
 
 class Route {
@@ -18,7 +18,10 @@ class Route {
     }
 
     setParams(config:any) {
-    	this.params = new Params(config);
+        console.log(config, Params);
+        if (config) {
+            this.params = new Params(config);
+        }
     }
 }
 

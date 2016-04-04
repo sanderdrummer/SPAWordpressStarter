@@ -1,4 +1,5 @@
 import Route = require('./route');
+import Param = require('./param');
 
 class Router {
 
@@ -35,7 +36,7 @@ class Router {
 
         if (result.doesMatch) {
 
-            route.callback(result.params);
+            route.callback(new Param(result.params));
         }
     }
 

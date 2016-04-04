@@ -9,7 +9,6 @@ import staticTemplate = require('../staticPage/staticTemplate');
 
 class NavBar {
 
-	routes: Route[];
 	router: Router;
 	elem: Element;
 	postListFactory: PostListFactory;
@@ -34,26 +33,30 @@ class NavBar {
 	}
 
 	bootstrap(configs:any[]) {
-		this.addRoutes(configs)
+		this.addRoutes(configs);
 
 	}
 
 	addRoutes(configs:any[]) {
 		configs.forEach((config) => {
-			this.routes.push(new Route(config))
+			this.router.routes.push(new Route(config))
 		});
 	}
 
 	reset(){
-		this.routes.forEach((route) =>{
+		this.router.routes.forEach((route) =>{
 			route.view.active = false;
 		});
 	}
 
 	onRouteChange(route) {
 		this.reset();
-		route.view.active = true;
-		route.callback(route.params);
+        if (route && route.view && route.view[route.callback]) {
+            route.view.active = true;
+            route.view[route.callback](route.params);
+        } else {
+            console.log(404);
+        }
 	}
 
 	handleHashChange() {
