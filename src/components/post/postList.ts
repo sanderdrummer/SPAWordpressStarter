@@ -141,7 +141,6 @@ class PostList extends View{
 		this.leftPage = true;
 		var post = this.getPostById(this.posts, params.id);
 		post.render(postTemplate(post, params.category));
-		scrollPosition.set(0);
 	}
 
 	getPostById(list, id) {
