@@ -16,31 +16,6 @@ var pageFactory = new PageFactory();
 var homeView = new StaticView(homeTemplate);
 var staticView = new StaticView(staticTemplate);
 var router = new Router();
-// var navBar = new NavBar([
-//     {
-//         url: '/test',
-//         callback: 'getPage',
-//         label: 'test',
-//         type: 'static',
-//         view: new StaticView(homeTemplate)
-//     },
-//     {
-//         url: '/test2',
-//         callback: 'getPage',
-//         label: 'test2',
-//         type: 'static',
-//         view: new StaticView(staticTemplate)
-//     },
-//     {
-//         url: '/posts',
-//         callback: 'getpostList',
-//         label: 'posts',
-//         type: 'postList',
-//         view: postListFactory.getpostList('posts')
-//     },
-// ]);
-
-// var categorieApi = new CategoryApi();
 
 // set default route to home if no route is present
 if (!window.location.hash) {
