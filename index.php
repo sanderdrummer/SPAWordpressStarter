@@ -9,8 +9,8 @@
   </head>
   <body>
     <header>
-      <nav class="main">
-        <ul id="nav" class="nav">
+      <nav class="main fixed">
+        <ul id="nav"class="nav">
           <li><a href="#/">Home</a></li>
           <li><a href="#/static">StaticTest</a></li>
           <li><a href="#/posts">post</a></li>
