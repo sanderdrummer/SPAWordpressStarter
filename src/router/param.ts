@@ -6,7 +6,7 @@ class Param {
 	constructor(config:any) {
 		this.id = config.id || 0;
 		this.category = config.category || '';
-		this.page = config.page || 0;
+		this.page = config.page || 1;
 	}
 }
 

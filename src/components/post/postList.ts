@@ -4,7 +4,7 @@ import View = require('../view');
 import template = require('./postListTemplate');
 import postTemplate = require('./postTemplate');
 import scrollPosition = require('../../services/scroll/scrollPosition');
-import Param = require('../router/param');
+import Param = require('../../router/param');
 
 class PostList extends View{
 
@@ -13,7 +13,7 @@ class PostList extends View{
 	template: string;
 	posts: Post[];
 	filteredPosts: Post[];
-	params: {};
+	params: Param;
 	page: number;
 	viewHeight: number;
 	currentScrollPosition: number;
@@ -29,7 +29,7 @@ class PostList extends View{
 		this.api = new PostApi();
 		this.notDone = true;
 		this.leftPage = true;
-		this.params = {};
+		this.params = new Param({});
 		this.currentScrollPosition = scrollPosition.get();
 
 		document.addEventListener('scroll', () => {
@@ -63,10 +63,10 @@ class PostList extends View{
 
 	}
 
-	fetchPostsByApi(params: Param) {
+	fetchPostsByApi(params:Param) {
 
 		// extend params
-		params = params || {};
+		params = params || new Param({});
 		params.page = params.page || 1;
 
 		// fetch posts by api

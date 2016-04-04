@@ -1,5 +1,6 @@
 
 import Api = require('../../api/api');
+import Param = require('../../router/param');
 
 class PageApi extends Api{
 
@@ -7,7 +8,7 @@ class PageApi extends Api{
 		super('pages')
 	}
 
-	getPage(params:Object) {
+	getPage(params:Param) {
 		
 		var restUrl;
 		if (params.id) {

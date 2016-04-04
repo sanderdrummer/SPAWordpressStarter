@@ -23,7 +23,7 @@ class Api {
 
 	}
 
-	addParams(params: Object, url:String): string {
+	addParams(params: Object, url:string): string {
 
 		var seperator = '?';
 		var key;
