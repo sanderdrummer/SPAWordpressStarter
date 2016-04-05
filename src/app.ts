@@ -9,6 +9,7 @@ import homeTemplate = require('./components/staticPage/homeTemplate');
 import staticTemplate = require('./components/staticPage/staticTemplate');
 import CategoryApi = require('./components/category/categoryApi');
 import NavBar = require('./components/navBar/navBar');
+import scrollPosition = require('./services/scroll/scrollPosition');
 
 
 var postListFactory = new PostListFactory();
@@ -16,31 +17,7 @@ var pageFactory = new PageFactory();
 var homeView = new StaticView(homeTemplate);
 var staticView = new StaticView(staticTemplate);
 var router = new Router();
-// var navBar = new NavBar([
-//     {
-//         url: '/test',
-//         callback: 'getPage',
-//         label: 'test',
-//         type: 'static',
-//         view: new StaticView(homeTemplate)
-//     },
-//     {
-//         url: '/test2',
-//         callback: 'getPage',
-//         label: 'test2',
-//         type: 'static',
-//         view: new StaticView(staticTemplate)
-//     },
-//     {
-//         url: '/posts',
-//         callback: 'getpostList',
-//         label: 'posts',
-//         type: 'postList',
-//         view: postListFactory.getpostList('posts')
-//     },
-// ]);
-
-// var categorieApi = new CategoryApi();
+var navBar = new NavBar();
 
 // set default route to home if no route is present
 if (!window.location.hash) {
@@ -77,6 +54,7 @@ router.register('/', (params) => {
 });
 
 function onRouteChange(view) {
+	scrollPosition.set(0);
 	pageFactory.resetActive();
 	postListFactory.resetActive();
 	view.active = true;

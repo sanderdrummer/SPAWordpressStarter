@@ -23,6 +23,7 @@ ul.nav{
 }
 
 nav.main{
+    top:0;
     width: 100%;
     background-color: @highlight;
     height: 2*@leading;
@@ -31,4 +32,9 @@ nav.main{
   &.fixed{
       position: fixed;
   }
+}
+
+.inView{
+    margin-right: -100%;
+    .animate(all, 500ms);
 }

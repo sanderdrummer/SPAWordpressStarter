@@ -1,6 +1,8 @@
 import PageApi = require('./pageApi');
 import Page = require('./page');
 import View = require('../view');
+import Param = require('../../router/param');
+
 
 class PostList extends View{
 
@@ -15,7 +17,7 @@ class PostList extends View{
 		this.api = new PageApi();
 	}
 
-	getPage(params:Object) {
+	getPage(params:Param) {
 
 		this.viewElem.classList.add('loader');
 		

@@ -1,5 +1,6 @@
 
 import Api = require('../../api/api');
+import Param = require('../../router/param');
 
 class PostApi extends Api{
 
@@ -7,7 +8,7 @@ class PostApi extends Api{
 		super('posts')
 	}
 
-	getPosts(params:Object) {
+	getPosts(params:Param) {
 
 		var url = '';
 
