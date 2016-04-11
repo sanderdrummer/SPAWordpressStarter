@@ -1,9 +1,4 @@
 export = {
-	postList: '',
-	pages: {},
-	api: {},
-	categories: [],
-	index: 0,
 
 	generateKey: function(obj:Object, url:string) {
 		var key;
