@@ -5,7 +5,7 @@ class NavBar {
 	elem: Element;
 	toggle: Element;
 
-	constructor(configs: any[]) {
+	constructor() {
 		this.elem = document.getElementById(Config.NAVELEM);
 		this.toggle = this.elem.querySelector('.toggle');
 		this.toggle.addEventListener('click', () => this.toggleNav());
