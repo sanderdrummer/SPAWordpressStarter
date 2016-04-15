@@ -1,5 +1,7 @@
+declare function fetch(any):any;
+
+
 import Config = require('../config');
-import cache = require('../components/common/cache');
 
 class Api {
 	baseUrl: string;
@@ -11,41 +13,27 @@ class Api {
 	}
 
 	get(params: Object, url:string) {
-		var key;
 		var result;
 
 		url = url || this.baseUrl;
-		url = this.addParams(params, url);
+		url = Api.addParams(params, url);
 
-		key = cache.generateKey(params, url);
-
-		if (this.cache[key]) {
-
-			result = new Promise(function(resolve){
-				resolve(this.cache[key])
-			});
-
-		} else {
-			result = fetch(url).then((res) => {
-				return res.json();
-			});
-
-		}
+        result = fetch(url);
 
 		return result;
 
 	}
 
-	addParams(params: Object, url:string): string {
+	static addParams(params: Object, url:string): string {
 
-		var seperator = '?';
+		var separator = '?';
 		var key;
 
 		for (key in params) {
 			if (key && params[key]) {
-				url += seperator + key +
+				url += separator + key +
 					'=' + params[key];
-				seperator = '&';
+				separator = '&';
 			}
 		}
 
