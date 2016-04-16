@@ -15,7 +15,7 @@
     <header>
       <nav id="nav" class="main fixed">
         <ul class="container nav">
-          <li class="toggle">Toggle</li>
+          <li class="toggle icon-menu"></li>
           <li><a href="#/">Home</a></li>
           <li><a href="#/static">StaticTest</a></li>
           <li><a href="#/posts">post</a></li>
