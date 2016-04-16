@@ -12,7 +12,7 @@ class PostList extends View{
 	templateCache: string;
 	template: string;
 	posts: Post[];
-	filteredPosts: Post[];
+	// filteredPosts: Post[];
 	pageCache: {};
 	params: Param;
 	page: number;
@@ -24,6 +24,7 @@ class PostList extends View{
 
 	constructor() {
 		super();
+
 		this.page = 1;
 		this.pageCache = {};
 		this.template = '';

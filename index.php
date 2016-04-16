@@ -5,7 +5,11 @@
     <meta charset="utf-8">
     <title>Test</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" 
+    <style>
+      body{
+        background-color: #eee;
+      }
+    </style>
   </head>
   <body>
     <header>
