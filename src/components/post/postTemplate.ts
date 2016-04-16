@@ -14,10 +14,8 @@ export = function applyTemplate(post:Post, category) {
 		</div>
 	</div>
 	<a href="#/posts/${category}">
-		<div class="grid box">
-				<div class="col-12">
-					${category}
-				</div>
+		<div class="box">
+			${category}
 		</div>
 	</a>
 	`;

@@ -28,7 +28,7 @@ function getDefault(post: Post, category) {
 function getCards(post: Post, category) {
 	return `
 	<div id="post_${post.id}" class="cards-item">
-		<div class="col-12">
+		<div>
 			<h2 class="hug">
 				${post.title}
 			</h2>	
@@ -49,7 +49,7 @@ export = function applyTemplate(post:Post, category) {
 	var template;
 	switch (category) {
 		case 'gigs':
-			template = getCards(post, category)
+			template = getCards(post, category);
 			break;
 		
 		default:
