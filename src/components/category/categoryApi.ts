@@ -1,6 +1,5 @@
 import Api = require('../../api/api');
 import Category = require('./category');
-import cache = require('../common/cache');
 
 class CategoryApi extends Api{
 
@@ -22,7 +21,6 @@ class CategoryApi extends Api{
 		})
 		.then((res) => {
 			this.createCategories(res);
-			cache.categories = this.categories;
 		})
 	}
 

@@ -4,8 +4,9 @@ import Param = require('../../router/param');
 
 class PostApi extends Api{
 
+
 	constructor() {
-		super('posts')
+		super('posts');
 	}
 
 	getPosts(params:Param) {

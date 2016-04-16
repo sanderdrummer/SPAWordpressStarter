@@ -47,7 +47,6 @@ function getCards(post: Post, category) {
 
 export = function applyTemplate(post:Post, category) {
 	var template;
-	console.log(category);
 	switch (category) {
 		case 'gigs':
 			template = getCards(post, category)

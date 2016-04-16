@@ -1,4 +1,5 @@
 declare function require(string): string;
+
 require('../style/main.less');
 
 import Router = require('./router/router');
