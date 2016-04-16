@@ -10,7 +10,7 @@
   <body>
     <header>
       <nav id="nav" class="main fixed">
-        <ul class="nav">
+        <ul class="container nav">
           <li class="toggle">Toggle</li>
           <li><a href="#/">Home</a></li>
           <li><a href="#/static">StaticTest</a></li>
@@ -24,7 +24,7 @@
         </ul>
       </nav>
     </header>
-    <div id="view" class="container"></div>
+    <div id="view" class="width"></div>
     <footer>
     </footer>
     <script type="text/javascript" 

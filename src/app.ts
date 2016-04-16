@@ -59,3 +59,5 @@ function onRouteChange(view) {
 	postListFactory.resetActive();
 	view.active = true;
 }
+
+document.body.style.backgroundImage = 'url(http://hd.wallpaperswide.com/thumbs/may_the_funk_be_with_you-t2.jpg)';
