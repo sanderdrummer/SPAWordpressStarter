@@ -9,10 +9,11 @@ import Param = require('../../router/param');
 class PostList extends View{
 
 	api: PostApi;
-	cache: '';
+	templateCache: string;
 	template: string;
 	posts: Post[];
 	filteredPosts: Post[];
+	pageCache: {};
 	params: Param;
 	page: number;
 	viewHeight: number;
@@ -24,6 +25,7 @@ class PostList extends View{
 	constructor() {
 		super();
 		this.page = 1;
+		this.pageCache = {};
 		this.template = '';
 		this.posts = [];
 		this.api = new PostApi();
@@ -49,11 +51,11 @@ class PostList extends View{
 		}
 
 		// Check if posts are already in cache
-		if (this.cache && !this.notDone) {
-			this.render(this.cache);
+		if (this.templateCache && !this.notDone) {
+			this.render(this.templateCache);
 
 		} else {
-			this.fetchPostsByApi(params);
+			this.getPostsBy(params);
 		}
 
 		if (this.leftPage) {
@@ -63,11 +65,32 @@ class PostList extends View{
 
 	}
 
-	fetchPostsByApi(params:Param) {
+	getPostsBy(params:Param) {
 
 		// extend params
 		params = params || new Param({});
 		params.page = params.page || 1;
+
+		var key = params.getCacheKey();
+		if (this.pageCache[key]) {
+			this.posts = this.pageCache[key];
+			this.processTemplate();
+		} else {
+			this.fetchPostsByApi(params);
+		}
+	}
+
+	processTemplate() {
+		this.compose(this.params.category);
+		this.render(this.template);
+		this.setTemplateCache(this.template);
+		this.viewHeight = this.getHeight();
+	}
+
+
+	fetchPostsByApi(params:Param) {
+
+		var key = params.getCacheKey();
 
 		// fetch posts by api
 		this.api.getPosts(params)
@@ -78,11 +101,8 @@ class PostList extends View{
 
 				if (res.length) {
 					this.createPostList(res);
-					this.compose(this.params.category);
-					this.render(this.template);
-					this.setCache(this.template);
-					this.viewHeight = this.getHeight();
-
+					this.processTemplate();
+					this.pageCache[key] = this.posts;
 				} else {
 					this.notDone = false
 				}
@@ -128,11 +148,11 @@ class PostList extends View{
 		console.log(filterVar);
 	}
 
-	setCache(template) {
+	setTemplateCache(template) {
 
 		// extend cache
 		if (template && !this.notDone) {
-			this.cache = template;
+			this.templateCache = template;
 		}
 	}
 

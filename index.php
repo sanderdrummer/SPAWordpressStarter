@@ -17,7 +17,7 @@
           <li><a href="#/posts">post</a></li>
           <li><a href="#/posts/blog">blog</a></li>
           <li><a href="#/posts/gigs">gigs</a></li>
-          <li><a href="#/page/36">Page</a></li>
+          <li><a href="#/page/2">Page</a></li>
           <li><a href="#/page/82">Vogel</a></li>
           <li><a href="#/page/80">Leweds</a></li>
           <li><a href="#/Category">Category</a></li>
