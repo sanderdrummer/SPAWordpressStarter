@@ -1,6 +1,6 @@
 import Post = require('./post');
 
-export = function applyTemplate(post:Post, category) {
+export = function postTemplate(post:Post, category) {
 	var template = `
 	<div id="post_${post.id}" class="box">
 		<div class="grid">

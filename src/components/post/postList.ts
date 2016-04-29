@@ -1,8 +1,8 @@
 import PostApi = require('./postApi');
 import Post = require('./post');
 import View = require('../view');
-import template = require('./postListTemplate');
 import postListTemplate = require('./postListTemplate');
+import postTemplate = require('./postTemplate');
 import cardTemplate = require('./templates/cardTemplate');
 import scrollPosition = require('../../services/scroll/scrollPosition');
 import Param = require('../../router/param');
@@ -83,9 +83,9 @@ class PostList extends View{
 	}
 
 	processTemplate() {
-		this.compose(this.params.category);
-		this.render(this.template);
-		this.setTemplateCache(this.template);
+		this.applyTemplate(this.params.category);
+        this.render(this.template);
+        this.setTemplateCache(this.template);
 		this.viewHeight = this.getHeight();
 	}
 
@@ -133,12 +133,6 @@ class PostList extends View{
 		});
 	}
 
-	compose(category) {
-		this.sortList();
-		this.template = this.posts.map(post => {
-			return template(post, category);
-		}).join('');
-	}
 
 	appendOnScroll(params) {
 		this.page += 1;
@@ -162,27 +156,36 @@ class PostList extends View{
 		this.currentScrollPosition = scrollPosition.get();
 		this.leftPage = true;
 		var post = this.getPostById(this.posts, params.id);
-		post.render(this.applyTemplate(post, params.category));
+		post.render(postTemplate(post, params.category));
 		scrollPosition.set(0);
 
 	}
 
-    applyTemplate(post, category) {
-        var template;
+    applyTemplate(category) {
+        var template = '';
 
         switch (category) {
             case 'gigs':
-                console.log(category, cardTemplate  );
-                template = cardTemplate(post, category);
+                template += '<div class="flex">';
+                template += this.compose(cardTemplate, category);
+                template += '<div>';
+                console.log(template );
                 break;
 
             default:
-                template = postListTemplate(post, category);
+                template = this.compose(postListTemplate, category);
+
                 break;
         }
 
+        this.template = template;
+    }
 
-        return template;
+    compose(templateFunction, category) {
+        this.sortList();
+        return this.posts.map(post => {
+            return templateFunction(post, category);
+        }).join('');
     }
 
 	getPostById(list, id) {
