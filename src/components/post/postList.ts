@@ -2,7 +2,8 @@ import PostApi = require('./postApi');
 import Post = require('./post');
 import View = require('../view');
 import template = require('./postListTemplate');
-import postTemplate = require('./postTemplate');
+import postListTemplate = require('./postListTemplate');
+import cardTemplate = require('./templates/cardTemplate');
 import scrollPosition = require('../../services/scroll/scrollPosition');
 import Param = require('../../router/param');
 
@@ -161,10 +162,28 @@ class PostList extends View{
 		this.currentScrollPosition = scrollPosition.get();
 		this.leftPage = true;
 		var post = this.getPostById(this.posts, params.id);
-		post.render(postTemplate(post, params.category));
+		post.render(this.applyTemplate(post, params.category));
 		scrollPosition.set(0);
 
 	}
+
+    applyTemplate(post, category) {
+        var template;
+
+        switch (category) {
+            case 'gigs':
+                console.log(category, cardTemplate  );
+                template = cardTemplate(post, category);
+                break;
+
+            default:
+                template = postListTemplate(post, category);
+                break;
+        }
+
+
+        return template;
+    }
 
 	getPostById(list, id) {
 		var post:Post;
