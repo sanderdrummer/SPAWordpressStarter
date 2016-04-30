@@ -13,9 +13,11 @@
   </head>
   <body>
     <header>
-      <nav id="nav" class="main fixed">
-        <ul class="flex nav">
-          <li class="toggle icon-menu"></li>
+      <nav id="nav" class="main">
+        <ul class="fixed toggle">
+          <li class="icon-menu"></li>
+        </ul>
+        <ul id="main-menu" class="flex nav box m-t-0">
           <li><a href="#/">Home</a></li>
           <li><a href="#/static">StaticTest</a></li>
           <li><a href="#/posts">post</a></li>
