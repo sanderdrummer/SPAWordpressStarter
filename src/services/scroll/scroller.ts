@@ -1,5 +1,4 @@
 var lastPosition = window.pageYOffset;
-var stop = false;
 var onScroll = [];
 
 // animationFrame

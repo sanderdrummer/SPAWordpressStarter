@@ -1,7 +1,8 @@
-
 import Api = require('../../api/api');
 import Param = require('../../router/param');
 import Config = require('../../config');
+declare function fetch(any): any;
+
 
 class PostApi extends Api{
 
@@ -13,7 +14,7 @@ class PostApi extends Api{
 	getPosts(params:Param) {
 
 		var url = '';
-		console.log(params);
+
 		if (params.category && params.category != 'all') {
 			params['filter[category_name]'] = params.category;
 		}

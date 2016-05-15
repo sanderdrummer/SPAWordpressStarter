@@ -15,8 +15,9 @@ class Api {
 		var result;
 
 		url = url || this.baseUrl;
+		console.log(url);
 		url = Api.addParams(params, url);
-
+		console.log(url);
         result = fetch(url);
 
 		return result;
@@ -29,7 +30,7 @@ class Api {
 		var key;
 
 		for (key in params) {
-			if (key && params[key]) {
+			if (key && params[key] && key !== 'getCacheKey') {
 				url += separator + key +
 					'=' + params[key];
 				separator = '&';
