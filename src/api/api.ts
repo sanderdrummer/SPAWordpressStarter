@@ -1,6 +1,5 @@
 declare function fetch(any):any;
 
-
 import Config = require('../config');
 
 class Api {

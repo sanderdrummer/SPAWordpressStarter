@@ -153,11 +153,33 @@ class PostList extends View{
 	}
 
 	getSinglePost(params:Param) {
+		var post = this.getPostById(this.posts, params.id);
+		
 		this.currentScrollPosition = scrollPosition.get();
 		this.leftPage = true;
-		var post = this.getPostById(this.posts, params.id);
-		post.render(postTemplate(post, params.category));
-		scrollPosition.set(0);
+
+		if (post) {
+			post.render(postTemplate(post, params.category));
+			scrollPosition.set(0);
+			
+		} else {
+			this.api.getPost(params)
+				.then((res) => {
+					return res.json();
+				})
+				.then((res) => {
+						console.log(res);
+
+					if (res.id) {
+						post = new Post(res);
+						post.render(postTemplate(post, params.category));
+						scrollPosition.set(0);
+					} else {
+						this.notDone = false
+					}
+				});
+		}
+
 
 	}
 
@@ -169,7 +191,6 @@ class PostList extends View{
                 template += '<div class="flex">';
                 template += this.compose(cardTemplate, category);
                 template += '<div>';
-                console.log(template );
                 break;
 
             default:

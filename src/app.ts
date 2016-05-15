@@ -10,8 +10,9 @@ import homeTemplate = require('./components/staticPage/homeTemplate');
 import staticTemplate = require('./components/staticPage/staticTemplate');
 import CategoryApi = require('./components/category/categoryApi');
 import NavBar = require('./components/navBar/navBar');
+import ScrollToTop = require('./components/common/scrollToTop');
 import scrollPosition = require('./services/scroll/scrollPosition');
-
+import scroller = require('./services/scroll/scroller');
 
 var postListFactory = new PostListFactory();
 var pageFactory = new PageFactory();
@@ -19,6 +20,7 @@ var homeView = new StaticView(homeTemplate);
 var staticView = new StaticView(staticTemplate);
 var router = new Router();
 var navBar = new NavBar();
+ScrollToTop.init('scrollToTop');
 
 // set default route to home if no route is present
 if (!window.location.hash) {

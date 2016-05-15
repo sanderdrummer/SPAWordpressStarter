@@ -31,6 +31,7 @@
       </nav>
     </header>
     <div id="view" class="width"></div>
+    <div id="scrollToTop">BTT</div>
     <footer>
     </footer>
     <script type="text/javascript" 

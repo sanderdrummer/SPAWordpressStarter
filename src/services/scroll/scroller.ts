@@ -11,20 +11,19 @@ function loop(){
         scroll(loop);
 
     } else {
-               
-        // toggleNavOnScroll(w.pageYOffset);
-
         lastPosition = window.pageYOffset;
-        
+        onScroll.forEach(function(cb){
+            cb(lastPosition);
+        })        
         scroll(loop);
     }
 
 }
 
+loop();
+
 export = {
     addOnScroll: function(callback){
         onScroll.push(callback);
-    },
-    start: () => loop()
-
+    }
 }
