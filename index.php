@@ -6,7 +6,7 @@
     <title>Test</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="<?php bloginfo('template_url'); ?>/dist/main.css" rel='stylesheet' type='text/css'>
-    
+
     <style>
       body{
         background-color: #eee;
@@ -15,11 +15,14 @@
   </head>
   <body>
     <header>
-      <nav id="nav" class="main">
+      <nav id="nav" class="main m-b-3 effect2">
         <ul class="fixed toggle">
           <li class="icon-menu"></li>
         </ul>
-        <ul id="main-menu" class="flex nav box m-t-0">
+        <ul class="nav m-t-0 band-name">
+          <li><a href="">Die geilen Funkschweine</a></li>
+        </ul>
+        <ul id="main-menu" class="flex nav flex-right m-t-0 m-r-1">
           <li><a href="#/">Home</a></li>
           <li><a href="#/static">StaticTest</a></li>
           <li><a href="#/posts">post</a></li>
@@ -32,11 +35,12 @@
         </ul>
       </nav>
     </header>
+
     <div id="loader">
       <div class="icon-spinner"></div>
     </div>
     <div id="view" class="width"></div>
-    <div id="scrollToTop">BTT</div>
+    <div id="scrollToTop">^</div>
     <footer>
     </footer>
     <script type="text/javascript" 

@@ -1,6 +1,6 @@
 class Loader {
 	
-	loaderElem: Element;
+	loaderElem: HTMLElement;
 
 	constructor() {
 		this.loaderElem = document.getElementById('loader');

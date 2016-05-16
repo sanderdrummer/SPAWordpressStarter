@@ -2,7 +2,7 @@ import Post = require('./post');
 
 export = function postListTemplate(post: Post, category) {
     return `
-	<div id="post_${post.id}" class="box">
+	<div id="post_${post.id}" class="box effect8">
 		<div class="grid">
 			<div class="col-12">
 				<a href="#/post/${category}/${post.id}">
