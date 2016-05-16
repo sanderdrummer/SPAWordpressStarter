@@ -15,9 +15,7 @@ class Api {
 		var result;
 
 		url = url || this.baseUrl;
-		console.log(url);
 		url = Api.addParams(params, url);
-		console.log(url);
         result = fetch(url);
 
 		return result;

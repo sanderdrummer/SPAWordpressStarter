@@ -6,6 +6,7 @@ import postTemplate = require('./postTemplate');
 import cardTemplate = require('./templates/cardTemplate');
 import scrollPosition = require('../../services/scroll/scrollPosition');
 import Param = require('../../router/param');
+import Loader = require('../common/loader');
 
 class PostList extends View{
 
@@ -43,13 +44,15 @@ class PostList extends View{
 				this.appendOnScroll(this.params);
 			}
 		});
+
 	}
 
 	getPosts(params:Param) {
 		this.params = params;
 
 		if (this.leftPage) {
-			this.viewElem.classList.add('loader');
+			// this.viewElem.classList.add('loader');
+			this.loader.show();
 		}
 
 		// Check if posts are already in cache

@@ -19,7 +19,8 @@ class PostList extends View{
 
 	getPage(params:Param) {
 
-		this.viewElem.classList.add('loader');
+		// this.viewElem.classList.add('loader');
+		this.loader.show();
 		
 		// check if page is in cache
 		if (this.cache) {

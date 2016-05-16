@@ -1,18 +1,23 @@
 import Config = require('../config');
+import Loader = require('../components/common/loader');
+
 
 class View {
 	viewElem: Element;
 	scroll:any;
 	active: boolean;
+	loader: Loader;
 
 	constructor() {
 		this.viewElem = document.getElementById(Config.VIEWELEM);
+		this.loader = new Loader();
 	}
 
 	render(template:string) {
 		
 		this.viewElem.innerHTML = template;
-		this.viewElem.classList.remove('loader');
+		// this.viewElem.classList.remove('loader');
+		this.loader.hide();
 	}
 
 	getHeight() {
