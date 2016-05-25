@@ -14,28 +14,20 @@
     </style>
   </head>
   <body>
-    <header>
-      <nav id="nav" class="main m-b-3 effect2">
-        <ul class="fixed toggle">
-          <li class="icon-menu"></li>
-        </ul>
-        <ul class="nav m-t-0 band-name">
-          <li><a href="">Die geilen Funkschweine</a></li>
-        </ul>
-        <ul id="main-menu" class="flex flexNav">
-          <li><a href="#/">Home</a></li>
-          <li><a href="#/posts">Gigs</a></li>
-          <li><a href="#/posts/blog">Band</a></li>
-          <li><a href="#/posts/gigs">Media</a></li>
-        </ul>
-      </nav>
-    </header>
+
 
     <div id="loader">
       <div class="icon-spinner"></div>
     </div>
-    <div id="view"></div>
+    <div id="view" class="fadeIn"></div>
     <!-- <div id="scrollToTop">^</div> -->
+
+    <ul id="main-menu" class="slideInUp flex flexNav">
+        <li><a href="#/">Home</a></li>
+        <li><a href="#/posts">Gigs</a></li>
+        <li><a href="#/posts/blog">Band</a></li>
+        <li><a href="#/posts/gigs">Media</a></li>
+    </ul>
     <footer class="m-t-3">
     </footer>
     <script type="text/javascript" 

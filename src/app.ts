@@ -9,7 +9,7 @@ import StaticView = require('./components/staticPage/staticView');
 import homeTemplate = require('./components/staticPage/homeTemplate');
 import staticTemplate = require('./components/staticPage/staticTemplate');
 import CategoryApi = require('./components/category/categoryApi');
-import NavBar = require('./components/navBar/navBar');
+// import NavBar = require('./components/navBar/navBar');
 import ScrollToTop = require('./components/common/scrollToTop');
 import scrollPosition = require('./services/scroll/scrollPosition');
 import scroller = require('./services/scroll/scroller');
@@ -19,7 +19,7 @@ var pageFactory = new PageFactory();
 var homeView = new StaticView(homeTemplate);
 var staticView = new StaticView(staticTemplate);
 var router = new Router();
-var navBar = new NavBar();
+// var navBar = new NavBar();
 // ScrollToTop.init('scrollToTop');
 
 // set default route to home if no route is present
@@ -57,10 +57,19 @@ router.register('/', (params) => {
 });
 
 function onRouteChange(view) {
-	scrollPosition.set(0);
-	pageFactory.resetActive();
-	postListFactory.resetActive();
-	view.active = true;
+    var viewElem = document.getElementById('view');
+    viewElem.classList.add('animated');
+   viewElem.classList.remove('fadeIn');
+   viewElem.classList.add('fadeOut');
+    document.getElementById('main-menu').classList.add('animated');
+    setTimeout(() => {
+       viewElem.classList.remove('fadeOut');
+       viewElem.classList.add('fadeIn');
+    }, 100);
+    scrollPosition.set(0);
+    pageFactory.resetActive();
+    postListFactory.resetActive();
+    view.active = true;
 }
 
 // document.body.style.backgroundImage = 'url(http://hd.wallpaperswide.com/thumbs/may_the_funk_be_with_you-t2.jpg)';
