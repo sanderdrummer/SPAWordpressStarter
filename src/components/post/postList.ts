@@ -163,7 +163,7 @@ class PostList extends View{
 
 		if (post) {
 			post.render(postTemplate(post, params.category));
-			scrollPosition.set(0);
+			scrollPosition.set(330);
 			
 		} else {
 			this.api.getPost(params)
@@ -176,7 +176,7 @@ class PostList extends View{
 					if (res.id) {
 						post = new Post(res);
 						post.render(postTemplate(post, params.category));
-						scrollPosition.set(0);
+						scrollPosition.set(330);
 					} else {
 						this.notDone = false
 					}

@@ -20,7 +20,7 @@ var homeView = new StaticView(homeTemplate);
 var staticView = new StaticView(staticTemplate);
 var router = new Router();
 var navBar = new NavBar();
-ScrollToTop.init('scrollToTop');
+// ScrollToTop.init('scrollToTop');
 
 // set default route to home if no route is present
 if (!window.location.hash) {

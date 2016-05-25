@@ -1,19 +1,42 @@
-ul.nav{
-    li{
-        a {
-            color: lighten(@highlight, 20%);
-            display: block;
-            margin: @leading/4;
-            &.active,
-            &:hover{
-                text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
-                color: @highlight;
-            }
-        }
-    }
-}
+// ul.nav{
+//     li{
+//         a {
+//             color: lighten(@highlight, 20%);
+//             display: block;
+//             margin: @leading/4;
+//             &.active,
+//             &:hover{
+//                 text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+//                 color: @highlight;
+//             }
+//         }
+//     }
+// }
 
 .band-name {
     position: absolute;
     left: @leading;
+}
+
+.flexNav {
+    position: fixed;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+    bottom: 0;
+    width: 100%;
+    margin-bottom: 0;
+    li {
+        background-color: white;
+        flex: 0 1 25%;
+        border-right: solid 1px @light;
+        a{
+            display: block;
+            width: 100%;
+            padding: @leading;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        &:last-child{
+            border-right: none;
+        }
+    }
 }

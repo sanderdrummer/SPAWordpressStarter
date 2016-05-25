@@ -22,11 +22,16 @@
         <ul class="nav m-t-0 band-name">
           <li><a href="">Die geilen Funkschweine</a></li>
         </ul>
-        <ul id="main-menu" class="flex flexNav">
+        <ul id="main-menu" class="flex nav flex-right m-t-0 m-r-1">
           <li><a href="#/">Home</a></li>
-          <li><a href="#/posts">Gigs</a></li>
-          <li><a href="#/posts/blog">Band</a></li>
-          <li><a href="#/posts/gigs">Media</a></li>
+          <li><a href="#/static">StaticTest</a></li>
+          <li><a href="#/posts">post</a></li>
+          <li><a href="#/posts/blog">blog</a></li>
+          <li><a href="#/posts/gigs">gigs</a></li>
+          <li><a href="#/page/2">Page</a></li>
+          <li><a href="#/page/82">Vogel</a></li>
+          <li><a href="#/page/80">Leweds</a></li>
+          <li><a href="#/Category">Category</a></li>
         </ul>
       </nav>
     </header>
@@ -34,8 +39,8 @@
     <div id="loader">
       <div class="icon-spinner"></div>
     </div>
-    <div id="view"></div>
-    <!-- <div id="scrollToTop">^</div> -->
+    <div id="view" class="width"></div>
+    <div id="scrollToTop">^</div>
     <footer class="m-t-3">
     </footer>
     <script type="text/javascript" 
