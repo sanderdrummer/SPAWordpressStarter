@@ -3,7 +3,7 @@ import Loader = require('../components/common/loader');
 
 
 class View {
-	viewElem: Element;
+	viewElem: HTMLElement;
 	scroll:any;
 	active: boolean;
 	loader: Loader;

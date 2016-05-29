@@ -24,6 +24,7 @@ class PostList extends View{
 	notDone: boolean;
 	active: boolean;
 	loading: boolean;
+	loaderElement: HTMLElement;
 
 	constructor() {
 		super();
@@ -38,6 +39,7 @@ class PostList extends View{
 		this.loading = false;
 		this.params = new Param({});
 		this.currentScrollPosition = scrollPosition.get();
+		this.loaderElement = this.createLoaderElement();
 
 		document.addEventListener('scroll', () => {
 			if (this.notDone && 
@@ -99,7 +101,7 @@ class PostList extends View{
 	fetchPostsByApi(params:Param) {
 		var key = params.getCacheKey();
 
-		this.loading = true;
+		this.addListLoadingState();
 
 		// fetch posts by api
 		this.api.getPosts(params)
@@ -112,14 +114,14 @@ class PostList extends View{
 					this.createPostList(res);
 					this.processTemplate();
 					this.pageCache[key] = this.posts;
-					this.loading = false;
+					this.removeListLoadingState();
 
 				} else {
 					this.notDone = false;
-					this.loading = false;
+					this.removeListLoadingState();
 				}
 			},
-				() => {this.loading = false}
+				() => {this.removeListLoadingState()}
 			);
 	}
 
@@ -180,8 +182,6 @@ class PostList extends View{
 					return res.json();
 				})
 				.then((res) => {
-						console.log(res);
-
 					if (res.id) {
 						post = new Post(res);
 						post.render(postTemplate(post, params.category));
@@ -231,6 +231,22 @@ class PostList extends View{
 		});
 
 		return post;
+	}
+
+	createLoaderElement() {
+		this.viewElem.insertAdjacentHTML('afterend', `<div id="listLoader${this.params.category}" class="loader" style="display: none"><div class="icon-spinner"></div></div>`);
+		var elem = document.getElementById(`listLoader${this.params.category}`);
+		return elem;
+	}
+
+	addListLoadingState() {
+		this.loading = true;
+		this.loaderElement.style.display = 'block';
+	}
+
+	removeListLoadingState() {
+		this.loading = false;
+		this.loaderElement.style.display = 'none';
 	}
 }
 

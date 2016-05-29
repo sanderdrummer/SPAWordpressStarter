@@ -16,7 +16,7 @@
   <body>
 
 
-    <div id="loader">
+    <div class="loader" id="loader">
       <div class="icon-spinner"></div>
     </div>
     <div id="view" class="fadeIn"></div>
