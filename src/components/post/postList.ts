@@ -175,13 +175,13 @@ class PostList extends View{
 		this.leftPage = true;
 
 		if (post) {
-			eventBus.pageIsLoading(post);
+			eventBus.pageIsLoading(this);
 			post.render(postTemplate(post, params.category));
 			scrollPosition.set(0);
-			eventBus.pageLoaded(post);
+			eventBus.pageLoaded(this);
 
 		} else {
-			eventBus.pageIsLoading(post);
+			eventBus.pageIsLoading(this);
 			this.api.getPost(params)
 				.then((res) => {
 					return res.json();
@@ -191,7 +191,7 @@ class PostList extends View{
 						post = new Post(res);
 						post.render(postTemplate(post, params.category));
 						scrollPosition.set(0);
-						eventBus.pageLoaded(post);
+						eventBus.pageLoaded(this);
 					} else {
 						this.notDone = false
 					}
@@ -245,12 +245,13 @@ class PostList extends View{
 	}
 
 	addListLoadingState() {
-		eventBus.pageIsLoading(this);
+		eventBus.postsLoading(this);
 		this.loading = true;
 		this.loaderElement.style.display = 'block';
 	}
 
 	removeListLoadingState() {
+		eventBus.postsLoaded(this);
 		this.loading = false;
 		this.loaderElement.style.display = 'none';
 	}

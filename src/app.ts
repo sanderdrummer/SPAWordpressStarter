@@ -12,7 +12,7 @@ import CategoryApi = require('./components/category/categoryApi');
 // import NavBar = require('./components/navBar/navBar');
 import ScrollToTop = require('./components/common/scrollToTop');
 import scrollPosition = require('./services/scroll/scrollPosition');
-import scroller = require('./services/scroll/scroller');
+// import scroller = require('./services/scroll/scroller');
 
 var postListFactory = new PostListFactory();
 var pageFactory = new PageFactory();
@@ -57,16 +57,17 @@ router.register('/', (params) => {
 });
 
 function onRouteChange(view) {
-    // var viewElem = document.getElementById('view');
+    var viewElem = document.getElementById('view');
+	viewElem.innerHTML = '';
    //  viewElem.classList.add('animated');
    // viewElem.classList.remove('fadeIn');
    // // viewElem.classList.add('fadeOut');
-   //  document.getElementById('main-menu').classList.add('animated');
    //  setTimeout(() => {
    //     // viewElem.classList.remove('fadeOut');
    //     viewElem.classList.add('fadeIn');
    //  }, 100);
-    scrollPosition.set(0);
+	document.getElementById('main-menu').classList.add('animated');
+	scrollPosition.set(0);
     pageFactory.resetActive();
     postListFactory.resetActive();
     view.active = true;

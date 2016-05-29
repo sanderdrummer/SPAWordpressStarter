@@ -15,13 +15,14 @@
   </head>
   <body>
 
-
-    <div class="loader" id="loader">
-      <div class="icon-spinner"></div>
-    </div>
-    <div id="view" class="fadeIn"></div>
-    <div id="listLoader" class="loader" style="display: none">
-        <div class="icon-spinner"></div>
+    <div class="mainContainer relative">
+        <div class="loader" id="loader">
+          <div class="icon-spinner"></div>
+        </div>
+        <div id="view" class="fadeIn"></div>
+        <div id="listLoader" class="loader" style="display: none">
+            <div class="icon-spinner"></div>
+        </div>
     </div>
     <!-- <div id="scrollToTop">^</div> -->
 
@@ -31,7 +32,7 @@
         <li><a href="#/posts/band">Band</a></li>
         <li><a href="#/posts/media">Media</a></li>
     </ul>
-    <footer class="m-t-3">
+    <footer class="m-t-5">
          <a href="#/page/103">Impressum</a>
          <a href="#/posts/blog">Blog</a>
     </footer>
