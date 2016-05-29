@@ -1,6 +1,9 @@
-/**
- * Created by Tobias on 08.04.2016.
- */
+import Loader = require('./components/common/loader');
+import scrollPosition = require('./services/scroll/scrollPosition');
+
+var loader = new Loader();
+
+
 var EventBus = {
 
     bus:{},
@@ -24,19 +27,31 @@ var EventBus = {
     },
 
     pageIsLoading: function(page) {
-        console.log('load page', page );
+        // page.viewElem.classList.remove('animated');
+        // page.viewElem.classList.remove('bounceIn');
+        loader.show();
+        // console.log('load page', page );
+        // page.viewElem.classList.add('bounceOut');
+        // page.viewElem.classList.add('animated');
     },
 
     pageLoaded: function(page) {
-        console.log('loaded page',page);
+        // page.viewElem.classList.remove('animated');
+        // page.viewElem.classList.remove('bounceOut');
+        // page.viewElem.classList.add('bounceIn');
+        // page.viewElem.classList.add('animated');
+        loader.hide();
+        scrollPosition.set(0);
+        console.log(this, 'geladen' );
+        // console.log('loaded page',page);
     },
 
     postsLoading: function(page) {
-        console.log('load posts', page );
+        // console.log('load posts', page );
     },
 
     postsLoaded: function(page) {
-        console.log('loaded posts', page );
+        // console.log('loaded posts', page );
     }
 };
 

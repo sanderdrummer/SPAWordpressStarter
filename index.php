@@ -19,7 +19,7 @@
         <div class="loader" id="loader">
           <div class="icon-spinner"></div>
         </div>
-        <div id="view" class="fadeIn"></div>
+        <div id="view"></div>
         <div id="listLoader" class="loader" style="display: none">
             <div class="icon-spinner"></div>
         </div>

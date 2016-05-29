@@ -7,7 +7,7 @@ var scrollPosition = {
 	set: function(position:number){
 		setTimeout(() => {
 			scrollTo(0, position)
-		},100);
+		},10);
 	}
 };
 

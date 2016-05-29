@@ -6,7 +6,6 @@ import postTemplate = require('./postTemplate');
 import cardTemplate = require('./templates/cardTemplate');
 import scrollPosition = require('../../services/scroll/scrollPosition');
 import Param = require('../../router/param');
-import Loader = require('../common/loader');
 import eventBus = require('../../eventBus');
 
 class PostList extends View{
@@ -57,14 +56,12 @@ class PostList extends View{
 	getPosts(params:Param) {
 		this.params = params;
 
-		if (this.leftPage) {
-			// this.viewElem.classList.add('loader');
-			this.loader.show();
-		}
+		this.addListLoadingState();
 
 		// Check if posts are already in cache
 		if (this.templateCache && !this.notDone) {
 			this.render(this.templateCache);
+			this.removeListLoadingState();
 
 		} else {
 			this.getPostsBy(params);
@@ -97,6 +94,8 @@ class PostList extends View{
         this.render(this.template);
         this.setTemplateCache(this.template);
 		this.viewHeight = this.getHeight();
+		this.removeListLoadingState();
+
 	}
 
 
@@ -116,7 +115,6 @@ class PostList extends View{
 					this.createPostList(res);
 					this.processTemplate();
 					this.pageCache[key] = this.posts;
-					this.removeListLoadingState();
 
 				} else {
 					this.notDone = false;
@@ -245,15 +243,26 @@ class PostList extends View{
 	}
 
 	addListLoadingState() {
-		eventBus.postsLoading(this);
-		this.loading = true;
-		this.loaderElement.style.display = 'block';
+		if (this.page !== 1) {
+			eventBus.postsLoading(this);
+			this.loading = true;
+			this.loaderElement.style.display = 'block';
+			console.log('add list style' );
+		} else {
+			eventBus.pageIsLoading(this);
+		}
 	}
 
 	removeListLoadingState() {
-		eventBus.postsLoaded(this);
-		this.loading = false;
-		this.loaderElement.style.display = 'none';
+		console.log(this.page, this.notDone );
+		if (this.page !== 1) {
+			eventBus.postsLoaded(this);
+			this.loading = false;
+			this.loaderElement.style.display = 'none';
+			console.log('remove list style', this.page, this.notDone );
+		} else {
+			eventBus.pageLoaded(this);
+		}
 	}
 }
 

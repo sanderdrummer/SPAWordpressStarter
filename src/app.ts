@@ -57,8 +57,6 @@ router.register('/', (params) => {
 });
 
 function onRouteChange(view) {
-    var viewElem = document.getElementById('view');
-	viewElem.innerHTML = '';
    //  viewElem.classList.add('animated');
    // viewElem.classList.remove('fadeIn');
    // // viewElem.classList.add('fadeOut');

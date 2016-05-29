@@ -22,8 +22,7 @@ class PostList extends View{
 
 		// this.viewElem.classList.add('loader');
 		eventBus.pageIsLoading(this);
-		this.loader.show();
-		
+
 		// check if page is in cache
 		if (this.cache) {
 			this.render(this.cache);
