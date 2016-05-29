@@ -7,6 +7,7 @@ import cardTemplate = require('./templates/cardTemplate');
 import scrollPosition = require('../../services/scroll/scrollPosition');
 import Param = require('../../router/param');
 import Loader = require('../common/loader');
+import eventBus = require('../../eventBus');
 
 class PostList extends View{
 
@@ -39,11 +40,12 @@ class PostList extends View{
 		this.loading = false;
 		this.params = new Param({});
 		this.currentScrollPosition = scrollPosition.get();
-		this.loaderElement = this.createLoaderElement();
+		this.loaderElement = this.getLoaderElement();
 
 		document.addEventListener('scroll', () => {
 			if (this.notDone && 
 				this.active &&
+				!this.leftPage &&
 				!this.loading
 				) {
 				this.appendOnScroll(this.params);
@@ -173,10 +175,13 @@ class PostList extends View{
 		this.leftPage = true;
 
 		if (post) {
+			eventBus.pageIsLoading(post);
 			post.render(postTemplate(post, params.category));
 			scrollPosition.set(0);
-			
+			eventBus.pageLoaded(post);
+
 		} else {
+			eventBus.pageIsLoading(post);
 			this.api.getPost(params)
 				.then((res) => {
 					return res.json();
@@ -186,6 +191,7 @@ class PostList extends View{
 						post = new Post(res);
 						post.render(postTemplate(post, params.category));
 						scrollPosition.set(0);
+						eventBus.pageLoaded(post);
 					} else {
 						this.notDone = false
 					}
@@ -233,13 +239,13 @@ class PostList extends View{
 		return post;
 	}
 
-	createLoaderElement() {
-		this.viewElem.insertAdjacentHTML('afterend', `<div id="listLoader${this.params.category}" class="loader" style="display: none"><div class="icon-spinner"></div></div>`);
-		var elem = document.getElementById(`listLoader${this.params.category}`);
+	getLoaderElement() {
+		var elem = document.getElementById('listLoader');
 		return elem;
 	}
 
 	addListLoadingState() {
+		eventBus.pageIsLoading(this);
 		this.loading = true;
 		this.loaderElement.style.display = 'block';
 	}

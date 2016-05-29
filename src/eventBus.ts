@@ -21,7 +21,23 @@ var EventBus = {
                 event[i](data);
             }
         }
+    },
+
+    pageIsLoading: function(page) {
+        console.log('load page', page );
+    },
+
+    pageLoaded: function(page) {
+        console.log('loaded page',page);
+    },
+
+    postsLoading: function(page) {
+        console.log('load posts', page );
+    },
+
+    postsLoaded: function(page) {
+        console.log('loaded posts', page );
     }
-}
+};
 
 export = EventBus;

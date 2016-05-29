@@ -20,6 +20,9 @@
       <div class="icon-spinner"></div>
     </div>
     <div id="view" class="fadeIn"></div>
+    <div id="listLoader" class="loader" style="display: none">
+        <div class="icon-spinner"></div>
+    </div>
     <!-- <div id="scrollToTop">^</div> -->
 
     <ul id="main-menu" class="slideInUp flex flexNav">
