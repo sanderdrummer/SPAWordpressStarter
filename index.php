@@ -27,7 +27,7 @@
     <!-- <div id="scrollToTop">^</div> -->
 
     <ul id="main-menu" class="slideInUp flex flexNav">
-        <li><a href="#/">Home</a></li>
+        <li><a href="#/home">Home</a></li>
         <li><a href="#/posts/gigs">Gigs</a></li>
         <li><a href="#/posts/band">Band</a></li>
         <li><a href="#/posts/media">Media</a></li>

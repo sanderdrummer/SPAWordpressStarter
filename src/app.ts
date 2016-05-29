@@ -24,10 +24,10 @@ var router = new Router();
 
 // set default route to home if no route is present
 if (!window.location.hash) {
-    window.location.hash = '#/';
+    window.location.hash = '#/home';
 }
 
-router.register('/', (params) => {
+router.register('/home', (params) => {
 	onRouteChange(homeView);
 	homeView.getPage();
 })

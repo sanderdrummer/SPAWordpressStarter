@@ -5,10 +5,12 @@ class Router {
 
     routes: Route[];
     findParam: RegExp;
+    as: HTMLAnchorElement[];
 
     constructor(){
         this.routes = [];
         this.findParam = new RegExp(':[a-zA-Z]*');
+        this.as = Array.prototype.slice.call(document.getElementById('main-menu').querySelectorAll('a'), 0);
 
         // Adds global eventlistener for routing on hashchange
         window.addEventListener('hashchange', () => {
@@ -101,7 +103,18 @@ class Router {
      */
     handleHashChange(){
         const hash =  window.location.hash.replace('#', '');
-        this.routes.forEach( (route) => {    
+        const slashReg = new RegExp('/','g');
+        const activeReg = new RegExp(hash.replace(slashReg,'\/'), 'g');
+
+        this.as.forEach((item:HTMLAnchorElement) => {
+            if (activeReg.test(item.href)) {
+                item.classList.add('active');
+            } else {
+                item.classList.remove('active');
+            }
+        });
+
+        this.routes.forEach( (route) => {
             this.parseRouteUrl(hash, route);
         });
     }
