@@ -56,7 +56,7 @@ class PostList extends View{
 	getPosts(params:Param) {
 		this.params = params;
 
-		this.addListLoadingState();
+		// this.addListLoadingState();
 
 		// Check if posts are already in cache
 		if (this.templateCache && !this.notDone) {
@@ -247,19 +247,16 @@ class PostList extends View{
 			eventBus.postsLoading(this);
 			this.loading = true;
 			this.loaderElement.style.display = 'block';
-			console.log('add list style' );
 		} else {
 			eventBus.pageIsLoading(this);
 		}
 	}
 
 	removeListLoadingState() {
-		console.log(this.page, this.notDone );
 		if (this.page !== 1) {
 			eventBus.postsLoaded(this);
 			this.loading = false;
 			this.loaderElement.style.display = 'none';
-			console.log('remove list style', this.page, this.notDone );
 		} else {
 			eventBus.pageLoaded(this);
 		}
