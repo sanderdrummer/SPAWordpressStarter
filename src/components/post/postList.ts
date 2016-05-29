@@ -23,6 +23,7 @@ class PostList extends View{
 	leftPage: boolean;
 	notDone: boolean;
 	active: boolean;
+	loading: boolean;
 
 	constructor() {
 		super();
@@ -34,13 +35,15 @@ class PostList extends View{
 		this.api = new PostApi();
 		this.notDone = true;
 		this.leftPage = true;
+		this.loading = false;
 		this.params = new Param({});
 		this.currentScrollPosition = scrollPosition.get();
 
 		document.addEventListener('scroll', () => {
 			if (this.notDone && 
 				this.active &&
-				this.viewHeight / 2 < window.pageYOffset) {
+				!this.loading
+				) {
 				this.appendOnScroll(this.params);
 			}
 		});
@@ -80,7 +83,7 @@ class PostList extends View{
 		if (this.pageCache[key]) {
 			this.posts = this.pageCache[key];
 			this.processTemplate();
-		} else {
+		} else if(!this.loading) {
 			this.fetchPostsByApi(params);
 		}
 	}
@@ -94,8 +97,9 @@ class PostList extends View{
 
 
 	fetchPostsByApi(params:Param) {
-
 		var key = params.getCacheKey();
+
+		this.loading = true;
 
 		// fetch posts by api
 		this.api.getPosts(params)
@@ -108,10 +112,15 @@ class PostList extends View{
 					this.createPostList(res);
 					this.processTemplate();
 					this.pageCache[key] = this.posts;
+					this.loading = false;
+
 				} else {
-					this.notDone = false
+					this.notDone = false;
+					this.loading = false;
 				}
-			});
+			},
+				() => {this.loading = false}
+			);
 	}
 
 	createPostList(rawPosts:Object[]) {

@@ -32,7 +32,7 @@ router.register('/', (params) => {
 	homeView.getPage();
 })
 .register('/static', (params) => {
-	var postList = postListFactory.getpostList(params);
+	postListFactory.getpostList(params);
 	onRouteChange(staticView);
 	staticView.getPage();
 }).register('/posts', (params) => {
@@ -60,16 +60,16 @@ function onRouteChange(view) {
     var viewElem = document.getElementById('view');
     viewElem.classList.add('animated');
    viewElem.classList.remove('fadeIn');
-   viewElem.classList.add('fadeOut');
+   // viewElem.classList.add('fadeOut');
     document.getElementById('main-menu').classList.add('animated');
     setTimeout(() => {
-       viewElem.classList.remove('fadeOut');
+       // viewElem.classList.remove('fadeOut');
        viewElem.classList.add('fadeIn');
     }, 100);
     scrollPosition.set(0);
     pageFactory.resetActive();
     postListFactory.resetActive();
     view.active = true;
-}
+} 
 
 // document.body.style.backgroundImage = 'url(http://hd.wallpaperswide.com/thumbs/may_the_funk_be_with_you-t2.jpg)';
