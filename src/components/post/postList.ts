@@ -24,6 +24,7 @@ class PostList extends View{
 	notDone: boolean;
 	active: boolean;
 	loading: boolean;
+	enterPage: boolean;
 	loaderElement: HTMLElement;
 
 	constructor() {
@@ -37,6 +38,7 @@ class PostList extends View{
 		this.notDone = true;
 		this.leftPage = true;
 		this.loading = false;
+		this.enterPage = true;
 		this.params = new Param({});
 		this.currentScrollPosition = scrollPosition.get();
 		this.loaderElement = this.getLoaderElement();
@@ -50,14 +52,15 @@ class PostList extends View{
 				this.appendOnScroll(this.params);
 			}
 		});
-
 	}
 
 	getPosts(params:Param) {
 		this.params = params;
 
 		// this.addListLoadingState();
-
+		if (this.enterPage) {
+			eventBus.pageIsLoading(this);
+		}
 		// Check if posts are already in cache
 		if (this.templateCache && !this.notDone) {
 			this.render(this.templateCache);
@@ -95,6 +98,10 @@ class PostList extends View{
         this.setTemplateCache(this.template);
 		this.viewHeight = this.getHeight();
 		this.removeListLoadingState();
+		if (this.enterPage) {
+			eventBus.pageLoaded(this);
+			this.enterPage = false;
+		}
 
 	}
 
@@ -247,8 +254,6 @@ class PostList extends View{
 			eventBus.postsLoading(this);
 			this.loading = true;
 			this.loaderElement.style.display = 'block';
-		} else {
-			eventBus.pageIsLoading(this);
 		}
 	}
 
@@ -257,8 +262,6 @@ class PostList extends View{
 			eventBus.postsLoaded(this);
 			this.loading = false;
 			this.loaderElement.style.display = 'none';
-		} else {
-			eventBus.pageLoaded(this);
 		}
 	}
 }
