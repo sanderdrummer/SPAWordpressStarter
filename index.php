@@ -27,11 +27,13 @@
 
     <ul id="main-menu" class="slideInUp flex flexNav">
         <li><a href="#/">Home</a></li>
-        <li><a href="#/posts">Gigs</a></li>
-        <li><a href="#/posts/blog">Band</a></li>
-        <li><a href="#/posts/gigs">Media</a></li>
+        <li><a href="#/posts/gigs">Gigs</a></li>
+        <li><a href="#/posts/band">Band</a></li>
+        <li><a href="#/posts/media">Media</a></li>
     </ul>
     <footer class="m-t-3">
+         <a href="#/page/103">Impressum</a>
+         <a href="#/posts/blog">Blog</a>
     </footer>
     <script type="text/javascript" 
       src="<?php bloginfo('template_url'); ?>/src/polyfills/fetch.js" charset="utf-8"></script>

@@ -1,4 +1,5 @@
 import View = require('../view');
+import eventBus = require('../../eventBus');
 
 class StaticView extends View {
 
@@ -10,7 +11,9 @@ class StaticView extends View {
 	}
 
 	getPage(){
-		this.render(this.template)
+		eventBus.pageIsLoading(this);
+		this.render(this.template);
+		eventBus.pageLoaded(this);
 	}
 
 }

@@ -57,15 +57,15 @@ router.register('/', (params) => {
 });
 
 function onRouteChange(view) {
-    var viewElem = document.getElementById('view');
-    viewElem.classList.add('animated');
-   viewElem.classList.remove('fadeIn');
-   // viewElem.classList.add('fadeOut');
-    document.getElementById('main-menu').classList.add('animated');
-    setTimeout(() => {
-       // viewElem.classList.remove('fadeOut');
-       viewElem.classList.add('fadeIn');
-    }, 100);
+    // var viewElem = document.getElementById('view');
+   //  viewElem.classList.add('animated');
+   // viewElem.classList.remove('fadeIn');
+   // // viewElem.classList.add('fadeOut');
+   //  document.getElementById('main-menu').classList.add('animated');
+   //  setTimeout(() => {
+   //     // viewElem.classList.remove('fadeOut');
+   //     viewElem.classList.add('fadeIn');
+   //  }, 100);
     scrollPosition.set(0);
     pageFactory.resetActive();
     postListFactory.resetActive();

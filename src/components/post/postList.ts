@@ -205,7 +205,7 @@ class PostList extends View{
         var template = '';
 
         switch (category) {
-            case 'gigs':
+            case 'band':
                 template += '<div class="flex">';
                 template += this.compose(cardTemplate, category);
                 template += '<div>';

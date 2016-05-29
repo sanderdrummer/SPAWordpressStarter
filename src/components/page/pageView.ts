@@ -2,6 +2,7 @@ import PageApi = require('./pageApi');
 import Page = require('./page');
 import View = require('../view');
 import Param = require('../../router/param');
+import eventBus = require('../../eventBus');
 
 
 class PostList extends View{
@@ -20,6 +21,7 @@ class PostList extends View{
 	getPage(params:Param) {
 
 		// this.viewElem.classList.add('loader');
+		eventBus.pageIsLoading(this);
 		this.loader.show();
 		
 		// check if page is in cache
@@ -35,9 +37,10 @@ class PostList extends View{
 				})
 				.then((res) => {
 					this.page = new Page(res);
-					this.templateString = this.applyTemplate(this.page)
+					this.templateString = this.applyTemplate(this.page);
 					this.render(this.templateString);
 					this.setCache();
+					eventBus.pageLoaded(this);
 				});
 		}
 
