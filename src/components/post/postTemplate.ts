@@ -19,6 +19,5 @@ export = function postTemplate(post:Post, category) {
 		</div>
 	</a>
 	`;
-
 	return template;
 };

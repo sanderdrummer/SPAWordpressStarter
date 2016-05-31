@@ -132,6 +132,13 @@ class PostList extends View{
 			);
 	}
 
+    searchForPosts(searchString:string) {
+        var params = new Param({
+            search: searchString
+        });
+        this.fetchPostsByApi(params);
+    }
+
 	createPostList(rawPosts:Object[]) {
 		var index = 0;
 		var length = rawPosts.length;

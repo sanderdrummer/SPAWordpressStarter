@@ -8,12 +8,13 @@ import PageFactory = require('./components/page/pageFactory');
 import StaticView = require('./components/staticPage/staticView');
 import homeTemplate = require('./components/staticPage/homeTemplate');
 import staticTemplate = require('./components/staticPage/staticTemplate');
+import searchComponent = require('./components/post/searchComponent');
 import CategoryApi = require('./components/category/categoryApi');
 // import NavBar = require('./components/navBar/navBar');
 import ScrollToTop = require('./components/common/scrollToTop');
 import scrollPosition = require('./services/scroll/scrollPosition');
 // import scroller = require('./services/scroll/scroller');
-
+console.log(searchComponent );
 var postListFactory = new PostListFactory();
 var pageFactory = new PageFactory();
 var homeView = new StaticView(homeTemplate);
@@ -38,7 +39,7 @@ router.register('/home', (params) => {
 }).register('/posts', (params) => {
 	params.category = 'all';
 	var postList = postListFactory.getpostList(params);
-	onRouteChange(postList);
+	onRouteChange(postList); 
 	postList.getPosts(params);
 })
 .register('/posts/:category', (params) => {
