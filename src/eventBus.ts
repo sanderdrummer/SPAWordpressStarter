@@ -42,7 +42,6 @@ var EventBus = {
         // page.viewElem.classList.add('animated');
         loader.hide();
         scrollPosition.set(0);
-        console.log(this, 'geladen' );
         // console.log('loaded page',page);
     },
 
