@@ -1,16 +1,5 @@
 import PostList = require('../post/postList');
 import template = require('./searchTemplate');
-//
-// console.log('kuchen' );
-//
-// var input:HTMLInputElement = <HTMLInputElement>document.getElementById('searchInput');
-// var button:HTMLButtonElement = <HTMLButtonElement>document.getElementById('searchButton');
-//
-// button.addEventListener('click', triggerSearch);
-//
-// function triggerSearch(){
-//
-// }
 
 class SearchComponent {
 
@@ -28,17 +17,18 @@ class SearchComponent {
     showSearchForm(){
         if(this.containerElem) {
             this.containerElem.style.display = 'block';
+            this.searchInputElem.focus();
         } else {
             this.containerElem = document.createElement('DIV');
             this.containerElem.innerHTML = template;
-            document.body.insertAdjacentElement('afterbegin',  this.containerElem );
+            document.body.insertBefore( this.containerElem, document.body.firstChild );
             this.bindSearchFormHandler();
+            this.searchInputElem.focus();
         }
 
     }
 
     bindSearchFormHandler(){
-        console.log('kuchen');
         this.endSearchElem = document.getElementById('endSearch');
         this.endSearchElem.addEventListener('click', () => this.close());
         document.addEventListener('keyup', (event) => {
