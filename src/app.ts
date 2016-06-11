@@ -51,6 +51,10 @@ router.register('/home', (params) => {
 	onRouteChange(postList);
 	postList.getPosts(params);
 })
+.register('/posts/:category/:id', (params) => {
+    var postList = postListFactory.getpostList(params);
+    postList.getSinglePost(params);
+})
 .register('/post/:category/:id', (params) => {
 	var postList = postListFactory.getpostList(params);
 	postList.getSinglePost(params);

@@ -103,8 +103,7 @@ class Router {
      */
     handleHashChange(){
         const hash =  window.location.hash.replace('#', '');
-        const slashReg = new RegExp('/','g');
-        const activeReg = new RegExp(hash.replace(slashReg,'\/'), 'g');
+        const activeReg = new RegExp(hash.split('/').slice(0,3).join('\/') + '.*', 'g');
 
         this.as.forEach((item:HTMLAnchorElement) => {
             if (activeReg.test(item.href)) {
