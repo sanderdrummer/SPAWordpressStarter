@@ -1,16 +1,6 @@
 import PostList = require('../post/postList');
 import template = require('./searchTemplate');
-//
-// console.log('kuchen' );
-//
-// var input:HTMLInputElement = <HTMLInputElement>document.getElementById('searchInput');
-// var button:HTMLButtonElement = <HTMLButtonElement>document.getElementById('searchButton');
-//
-// button.addEventListener('click', triggerSearch);
-//
-// function triggerSearch(){
-//
-// }
+
 
 class SearchComponent {
 
@@ -31,14 +21,13 @@ class SearchComponent {
         } else {
             this.containerElem = document.createElement('DIV');
             this.containerElem.innerHTML = template;
-            document.body.insertAdjacentElement('afterbegin',  this.containerElem );
+            document.getElementById('view').insertAdjacentElement('beforeBegin',  this.containerElem );
             this.bindSearchFormHandler();
         }
 
     }
 
     bindSearchFormHandler(){
-        console.log('kuchen');
         this.endSearchElem = document.getElementById('endSearch');
         this.endSearchElem.addEventListener('click', () => this.close());
         document.addEventListener('keyup', (event) => {
