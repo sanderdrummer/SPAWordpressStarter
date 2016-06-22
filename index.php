@@ -35,7 +35,7 @@
     <footer class="m-t-5">
          <a href="#/page/103">Impressum</a>
          <a href="#/posts/blog">Blog</a>
-        <input type="text" id="searchInput" placeholder="Suche"></input><button id="searchTrigger">Suchen</button>
+        <a id="searchTrigger">Suchen</a>
     </footer>
     <script type="text/javascript" 
       src="<?php bloginfo('template_url'); ?>/src/polyfills/fetch.js" charset="utf-8"></script>

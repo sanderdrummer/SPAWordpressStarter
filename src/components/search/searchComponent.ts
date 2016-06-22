@@ -1,7 +1,6 @@
 import PostList = require('../post/postList');
 import template = require('./searchTemplate');
 
-
 class SearchComponent {
 
     triggerElem: HTMLButtonElement;
@@ -18,11 +17,13 @@ class SearchComponent {
     showSearchForm(){
         if(this.containerElem) {
             this.containerElem.style.display = 'block';
+            this.searchInputElem.focus();
         } else {
             this.containerElem = document.createElement('DIV');
             this.containerElem.innerHTML = template;
-            document.getElementById('view').insertAdjacentElement('beforeBegin',  this.containerElem );
+            document.body.insertBefore( this.containerElem, document.body.firstChild );
             this.bindSearchFormHandler();
+            this.searchInputElem.focus();
         }
 
     }

@@ -5,7 +5,7 @@ export = function postListTemplate(post: Post, category) {
 	<div id="post_${post.id}" class="box effect8">
 		<div class="grid">
 			<div class="col-12">
-				<a href="#/post/${category}/${post.id}">
+				<a href="#/posts/${category}/${post.id}">
 				<h2 class="hug">
 					${post.title}
 				</h2>	
@@ -16,7 +16,7 @@ export = function postListTemplate(post: Post, category) {
 		<div class="grid">
 			<div class="col-12">
 				${post.excerpt}
-				<a href="#/post/${category}/${post.id}">
+				<a href="#/posts/${category}/${post.id}">
 					mehr lesen
 				</a> 
 			</div>
