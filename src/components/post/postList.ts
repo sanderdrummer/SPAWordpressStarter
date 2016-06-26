@@ -1,12 +1,13 @@
 import PostApi = require('./postApi');
 import Post = require('./post');
 import View = require('../view');
-import postListTemplate = require('./postListTemplate');
-import postTemplate = require('./postTemplate');
+import postListTemplate = require('./templates/postListTemplate');
+import postTemplate = require('./templates/postTemplate');
 import cardTemplate = require('./templates/cardTemplate');
 import scrollPosition = require('../../services/scroll/scrollPosition');
 import Param = require('../../router/param');
 import eventBus = require('../../eventBus');
+import TemplateFactory = require('./templates/templateFactory');
 
 class PostList extends View{
 
@@ -26,6 +27,7 @@ class PostList extends View{
 	loading: boolean;
 	enterPage: boolean;
 	loaderElement: HTMLElement;
+    templateFactory: TemplateFactory;
 
 	constructor() {
 		super();
@@ -42,6 +44,7 @@ class PostList extends View{
 		this.params = new Param({});
 		this.currentScrollPosition = scrollPosition.get();
 		this.loaderElement = this.getLoaderElement();
+        this.templateFactory = new TemplateFactory();
 
 		document.addEventListener('scroll', () => {
 			if (this.notDone && 
@@ -188,7 +191,7 @@ class PostList extends View{
 
 		if (post) {
 			eventBus.pageIsLoading(this);
-			post.render(postTemplate(post, params.category));
+			post.render(this.templateFactory.getSingleTemplateString(post, params.category));
 			scrollPosition.set(0);
 			eventBus.pageLoaded(this);
 
@@ -201,7 +204,7 @@ class PostList extends View{
 				.then((res) => {
 					if (res.id) {
 						post = new Post(res);
-						post.render(postTemplate(post, params.category));
+						post.render(this.templateFactory.getSingleTemplateString(post, params.category));
 						scrollPosition.set(0);
 						eventBus.pageLoaded(this);
 					} else {
@@ -214,29 +217,8 @@ class PostList extends View{
 	}
 
     applyTemplate(category) {
-        var template = '';
-
-        switch (category) {
-            case 'band':
-                template += '<div class="flex">';
-                template += this.compose(cardTemplate, category);
-                template += '<div>';
-                break;
-
-            default:
-                template = this.compose(postListTemplate, category);
-
-                break;
-        }
-
-        this.template = template;
-    }
-
-    compose(templateFunction, category) {
         this.sortList();
-        return this.posts.map(post => {
-            return templateFunction(post, category);
-        }).join('');
+        this.template = this.templateFactory.getListTemplateString(this.posts, category);
     }
 
 	getPostById(list, id) {
