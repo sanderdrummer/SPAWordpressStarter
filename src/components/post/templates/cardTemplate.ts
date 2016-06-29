@@ -1,7 +1,16 @@
 import Post = require('../post');
+import templateInterface = require("./templateInterface");
 
-export = function cardTemplate(post: Post, category) {
-    return `
+class CardTemplate implements templateInterface {
+    preTemplate:string;
+    template:any;
+    postTemplate:string;
+
+    constructor() {
+        this.preTemplate = `<div class="flex">`;
+        this.postTemplate = `<div class="flex">`;
+        this.template = function cardTemplate(post: Post, category) {
+            return `
 	<div id="post_${post.id}" class="cards-item">
 		<a href="#/post/${category}/${post.id}">
 			<div>
@@ -14,4 +23,8 @@ export = function cardTemplate(post: Post, category) {
 		</a>
 	</div>
 	`;
+        }
+    }
 }
+
+export = CardTemplate;
