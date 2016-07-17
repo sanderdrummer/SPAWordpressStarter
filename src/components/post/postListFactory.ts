@@ -14,7 +14,7 @@ class PostListFactory extends Factory{
 		if (this.collection[params.category]) {
 			return this.collection[params.category]
 		} else {
-			postList = new PostList();
+			postList = new PostList(params.category);
 			this.collection[params.category] = postList;
 			return postList;
 		}

@@ -11,6 +11,9 @@ class Factory {
 
 		for (item in this.collection) {
 			this.collection[item].active = false;
+            if (this.collection[item].paging) {
+                this.collection[item].paging.hidePaging();
+            }
 		}
 	}
 }

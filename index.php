@@ -20,9 +20,7 @@
           <div class="icon-spinner"></div>
         </div>
         <div id="view"></div>
-        <div id="listLoader" class="loader" style="display: none">
-            <div class="icon-spinner"></div>
-        </div>
+        <div id="pagingContainer"></div>
     </div>
     <!-- <div id="scrollToTop">^</div> -->
 

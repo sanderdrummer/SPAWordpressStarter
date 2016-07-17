@@ -8,20 +8,20 @@ class CardTemplate implements templateInterface {
 
     constructor() {
         this.preTemplate = `<div class="flex">`;
-        this.postTemplate = `<div class="flex">`;
+        this.postTemplate = `</div>`;
         this.template = function cardTemplate(post: Post, category) {
             return `
-	<div id="post_${post.id}" class="cards-item">
-		<a href="#/post/${category}/${post.id}">
-			<div>
-				<h2 class="hug">
-					${post.title}
-				</h2>	
-				${post.image ? `<img src=${post.image}>` : ''}
-			</div>
-			${post.excerpt}
-		</a>
-	</div>
+                <div id="post_${post.id}" class="cards-item">
+                    <a href="#/post/${category}/${post.id}">
+                        <div>
+                            <h2 class="hug">
+                                ${post.title}
+                            </h2>	
+                            ${post.image ? `<img src=${post.image}>` : ''}
+                        </div>
+                        ${post.excerpt}
+                    </a>
+                </div>
 	`;
         }
     }

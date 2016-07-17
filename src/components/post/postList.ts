@@ -8,6 +8,7 @@ import scrollPosition = require('../../services/scroll/scrollPosition');
 import Param = require('../../router/param');
 import eventBus = require('../../eventBus');
 import TemplateFactory = require('./templates/templateFactory');
+import Paging = require("./paging");
 
 class PostList extends View{
 
@@ -15,10 +16,10 @@ class PostList extends View{
 	templateCache: string;
 	template: string;
 	posts: Post[];
-	// filteredPosts: Post[];
 	pageCache: {};
 	params: Param;
 	page: number;
+	totalPages: number;
 	viewHeight: number;
 	currentScrollPosition: number;
 	leftPage: boolean;
@@ -26,13 +27,14 @@ class PostList extends View{
 	active: boolean;
 	loading: boolean;
 	enterPage: boolean;
-	loaderElement: HTMLElement;
     templateFactory: TemplateFactory;
+    paging:Paging;
 
-	constructor() {
+	constructor(category) {
 		super();
 
 		this.page = 1;
+		this.totalPages = 1;
 		this.pageCache = {};
 		this.template = '';
 		this.posts = [];
@@ -43,18 +45,8 @@ class PostList extends View{
 		this.enterPage = true;
 		this.params = new Param({});
 		this.currentScrollPosition = scrollPosition.get();
-		this.loaderElement = this.getLoaderElement();
+		this.paging = new Paging(category);
         this.templateFactory = new TemplateFactory();
-
-		document.addEventListener('scroll', () => {
-			if (this.notDone && 
-				this.active &&
-				!this.leftPage &&
-				!this.loading
-				) {
-				this.appendOnScroll(this.params);
-			}
-		});
 	}
 
 	getPosts(params:Param) {
@@ -68,8 +60,8 @@ class PostList extends View{
 		if (this.templateCache && !this.notDone) {
 			this.render(this.templateCache);
 			this.removeListLoadingState();
-
-		} else {
+            this.handlePostsPaging(this.totalPages);
+        } else {
 			this.getPostsBy(params);
 		}
 
@@ -81,10 +73,12 @@ class PostList extends View{
 	}
 
 	getPostsBy(params:Param) {
+        this.loader.show();
 
 		// extend params
 		params = params || new Param({});
 		params.page = params.page || 1;
+        this.params = params;
 
 		var key = params.getCacheKey();
 		if (this.pageCache[key]) {
@@ -111,29 +105,44 @@ class PostList extends View{
 
 	fetchPostsByApi(params:Param) {
 		var key = params.getCacheKey();
-
 		this.addListLoadingState();
 
 		// fetch posts by api
 		this.api.getPosts(params)
 			.then((res) => {
+                this.handlePostsPaging(res.headers.get('X-WP-TotalPages'));
 				return res.json();
 			})
 			.then((res) => {
-
 				if (res.length) {
 					this.createPostList(res);
 					this.processTemplate();
 					this.pageCache[key] = this.posts;
 
+
 				} else {
 					this.notDone = false;
 					this.removeListLoadingState();
 				}
+				this.loader.hide();
 			},
 				() => {this.removeListLoadingState()}
 			);
 	}
+
+	handlePostsPaging(totalPages) {
+        this.totalPages = totalPages;
+        if (this.paging.processPaging(this.page, this.totalPages)) {
+            this.paging.pagingElem.addEventListener('click', () => this.pageNext());
+        }
+    }
+
+    pageNext() {
+        this.page += 1;
+        this.params.page = this.page;
+        this.getPosts(this.params);
+    }
+
 
     searchForPosts(searchString:string) {
         var params = new Param({
@@ -162,13 +171,6 @@ class PostList extends View{
 		this.posts.sort((a,b) => {
 			return b.id - a.id;
 		});
-	}
-
-
-	appendOnScroll(params) {
-		this.page += 1;
-		params.page = this.page;
-		this.getPosts(params);
 	}
 
 	filterPosts(filterVar) {
@@ -212,8 +214,6 @@ class PostList extends View{
 					}
 				});
 		}
-
-
 	}
 
     applyTemplate(category) {
@@ -233,25 +233,17 @@ class PostList extends View{
 		return post;
 	}
 
-	getLoaderElement() {
-		var elem = document.getElementById('listLoader');
-		return elem;
-	}
-
 	addListLoadingState() {
 		if (this.page !== 1) {
-			eventBus.postsLoading(this);
 			this.loading = true;
-			this.loaderElement.style.display = 'block';
 		}
 	}
 
 	removeListLoadingState() {
 		if (this.page !== 1) {
-			eventBus.postsLoaded(this);
 			this.loading = false;
-			this.loaderElement.style.display = 'none';
-		}
+            this.loader.hide();
+        }
 	}
 }
 

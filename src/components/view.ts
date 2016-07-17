@@ -16,7 +16,6 @@ class View {
 	render(template:string) {
 		
 		this.viewElem.innerHTML = template;
-		// this.viewElem.classList.remove('loader');
 		this.loader.hide();
 	}
 

@@ -54,7 +54,7 @@ class SearchComponent {
     }
 
     triggerSearch() {
-        var postList = new PostList;
+        var postList = new PostList('search');
         var searchString = this.searchInputElem.value;
         postList.searchForPosts(searchString);
         this.searchInputElem.value = '';

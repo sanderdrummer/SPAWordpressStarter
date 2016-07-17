@@ -66,19 +66,14 @@ router.register('/home', (params) => {
 });
 
 function onRouteChange(view) {
-   //  viewElem.classList.add('animated');
-   // viewElem.classList.remove('fadeIn');
-   // // viewElem.classList.add('fadeOut');
-   //  setTimeout(() => {
-   //     // viewElem.classList.remove('fadeOut');
-   //     viewElem.classList.add('fadeIn');
-   //  }, 100);
 	document.getElementById('main-menu').classList.add('animated');
 	scrollPosition.set(0);
     pageFactory.resetActive();
     postListFactory.resetActive();
     view.active = true;
     view.enterPage = true;
-} 
 
-// document.body.style.backgroundImage = 'url(http://hd.wallpaperswide.com/thumbs/may_the_funk_be_with_you-t2.jpg)';
+    if (view.paging) {
+        view.handlePostsPaging(view.totalPages);
+    }
+}
