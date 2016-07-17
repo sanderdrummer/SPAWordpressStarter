@@ -143,14 +143,6 @@ class PostList extends View{
         this.getPosts(this.params);
     }
 
-
-    searchForPosts(searchString:string) {
-        var params = new Param({
-            search: searchString
-        });
-        this.fetchPostsByApi(params);
-    }
-
 	createPostList(rawPosts:Object[]) {
 		var index = 0;
 		var length = rawPosts.length;
@@ -233,16 +225,12 @@ class PostList extends View{
 	}
 
 	addListLoadingState() {
-		if (this.page !== 1) {
-			this.loading = true;
-		}
-	}
+        this.loading = true;
+    }
 
 	removeListLoadingState() {
-		if (this.page !== 1) {
-			this.loading = false;
-            this.loader.hide();
-        }
+        this.loader.hide();
+        this.loading = false;
 	}
 }
 

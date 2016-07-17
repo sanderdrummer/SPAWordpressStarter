@@ -24,7 +24,7 @@ class PostTemplate implements templateInterface {
 	</div>
 	<a href="#/posts/${category}">
 		<div class="box">
-			${category}
+			zurück
 		</div>
 	</a>
 	`;

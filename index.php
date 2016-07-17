@@ -22,7 +22,6 @@
         <div id="view"></div>
         <div id="pagingContainer"></div>
     </div>
-    <!-- <div id="scrollToTop">^</div> -->
 
     <ul id="main-menu" class="slideInUp flex flexNav">
         <li><a href="#/home">Home</a></li>

@@ -10,11 +10,12 @@ import homeTemplate = require('./components/staticPage/homeTemplate');
 import staticTemplate = require('./components/staticPage/staticTemplate');
 import CategoryApi = require('./components/category/categoryApi');
 
+import SearchComponent = require("./components/search/searchComponent");
 
 // import NavBar = require('./components/navBar/navBar');
-import ScrollToTop = require('./components/common/scrollToTop');
+// import ScrollToTop = require('./components/common/scrollToTop');
 import scrollPosition = require('./services/scroll/scrollPosition');
-import SearchComponent = require('./components/search/searchComponent');
+// import SearchComponent = require('./components/search/searchComponent');
 
 
 // import scroller = require('./services/scroll/scroller');
@@ -63,6 +64,12 @@ router.register('/home', (params) => {
 	var pageView = pageFactory.getPageView(params);
 	onRouteChange(pageView);
 	pageView.getPage(params);
+})
+.register('/search/:category/:search', (params) => {
+    console.log(params );
+	var searchPostList = postListFactory.getpostList(params);
+	onRouteChange(searchPostList);
+	searchPostList.getPosts(params);
 });
 
 function onRouteChange(view) {
