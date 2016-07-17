@@ -1,6 +1,7 @@
 declare function require(string): string;
 
 require('../style/main.less');
+import PostList = require("./components/post/postList");
 
 import Router = require('./router/router');
 import PostListFactory = require('./components/post/postListFactory');
@@ -66,10 +67,9 @@ router.register('/home', (params) => {
 	pageView.getPage(params);
 })
 .register('/search/:category/:search', (params) => {
-    console.log(params );
-	var searchPostList = postListFactory.getpostList(params);
+	var searchPostList = new PostList(params);
 	onRouteChange(searchPostList);
-	searchPostList.getPosts(params);
+    searchPostList.getPosts(params);
 });
 
 function onRouteChange(view) {
