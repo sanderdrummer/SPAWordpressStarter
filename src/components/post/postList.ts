@@ -190,15 +190,14 @@ class PostList extends View{
 		
 		this.currentScrollPosition = scrollPosition.get();
 		this.leftPage = true;
+        this.paging.hidePaging();
 
 		if (post) {
 			eventBus.pageIsLoading(this);
 			post.render(this.templateFactory.getSingleTemplateString(post, params.category));
 			scrollPosition.set(0);
-			eventBus.pageLoaded(this);
 
 		} else {
-			eventBus.pageIsLoading(this);
 			this.api.getPost(params)
 				.then((res) => {
 					return res.json();
